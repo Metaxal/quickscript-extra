@@ -3,7 +3,7 @@ Some scripts for [Quickscript](https://github.com/Metaxal/quickscript).
 # Installation
 
 ```
-raco pkg install quickscript-extra
+raco pkg install https://github.com/Metaxal/quickscript-extra.git
 ```
 (Requires quickscript to be installed.)
 
