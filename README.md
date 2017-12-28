@@ -11,9 +11,9 @@ Then register the new list of scripts in quickscript either by evaluating
 
 If DrRacket is already running, click on `Scripts>Manage scripts>Compile scripts and reload menu`.
 
-# Usage
-Once installed, simply click "Scripts>Reload Script menu" in DrRacket.
-The new scripts should now appear in the Scripts menu.
+# Scripts
+
+(TODO: to update)
 
 This package contains the following scritps:
 * **abstract**: When you want to replace an expression with a variable
