@@ -5,7 +5,11 @@ Some scripts for [Quickscript](https://github.com/Metaxal/quickscript).
 ```
 raco pkg install https://github.com/Metaxal/quickscript-extra.git
 ```
-(Requires quickscript to be installed.)
+Then register the new list of scripts in quickscript either by evaluating 
+`(require quickscript-extra/register)` in DrRacket, or on the command line with
+`$ racket -l quickscript-extra/register`.
+
+If DrRacket is already running, click on `Scripts>Manage scripts>Compile scripts and reload menu`.
 
 # Usage
 Once installed, simply click "Scripts>Reload Script menu" in DrRacket.
@@ -33,3 +37,10 @@ This package contains the following scritps:
 * **test-menu**: Example to show how to add and remove a menu to DrRacket
 * **test-slideshow**: Example to show how to insert slideshow images in DrRacket
 
+# Uninstall
+
+Before removing the package, first evaluate `(require quickscript-extra/unregister)`, 
+or on the command line with `$ racket -l quickscript-extra/unregister`.
+
+Then remove the package, either from DrRacket's `File` menu, or on the command line with
+`$ raco pkg remove quickscript-extra`.
