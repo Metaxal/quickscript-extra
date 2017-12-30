@@ -1,4 +1,4 @@
-Some scripts for [Quickscript](https://github.com/Metaxal/quickscript).
+Some scripts for [Quickscript](https://github.com/Metaxal/quickscript), which must be installed first.
 
 # Installation
 
