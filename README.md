@@ -1,6 +1,7 @@
-Some scripts for [Quickscript](https://github.com/Metaxal/quickscript), which must be installed first.
-
 # Quickscript Extra
+
+Some scripts for [Quickscript](https://github.com/Metaxal/quickscript),
+which must be installed first.
 
 ## 1. Installation
 
@@ -22,7 +23,7 @@ If DrRacket is already running, click on
 ## 2. Scripts
 
 * **abstract-variable**: Create a variable from the selected expression
-  \([video](https://www.youtube.com/watch?v=qgjAZd4eBBY)\).
+  \(video: https://www.youtube.com/watch?v=qgjAZd4eBBY\).
 
 * **add-menu**: \(Example\) Shows how to dynamically add a menu to
   DrRacket.
@@ -62,7 +63,7 @@ If DrRacket is already running, click on
 * **gui-tools**: Code snippets for racket/gui widgets. Meant as a demo.
 
 * **indent-table**: Indent rows on double-space-separated colums
-  \([video](https://www.youtube.com/watch?v=KJjVREsgnvA)\).
+  \(video: https://www.youtube.com/watch?v=KJjVREsgnvA\).
 
 * **insert-pict**: \(Example\) Insert a ‘pict‘ at the current position.
 
