@@ -2,6 +2,9 @@
 (require racket/class
          quickscript/script)
 
+
+(script-help-string
+ "Easily enter a submodule (main, test, drracket, etc.) in the interaction window.")
 ;;; Sends a snippet of text to the interactions window that, once entered,
 ;;; will enter (evaluate and make visible) the corresponding submodule.
 

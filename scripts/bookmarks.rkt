@@ -1,6 +1,8 @@
 #lang racket/gui
 (require quickscript/script)
 
+(script-help-string "Quickly navigate between lines")
+
 #|
 Bookmarks are "anchors" as comments in the source code, and thus are part of the file
 (but they are very little invasive and can be used, for example, as section headers).

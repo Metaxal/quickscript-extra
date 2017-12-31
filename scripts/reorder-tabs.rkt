@@ -6,6 +6,8 @@
          quickscript/script
          (only-in srfi/1 list-index))
 
+(script-help-string "(Example) Move DrRacket's tabs around.")
+
 (define-script move-left
   #:label "Move left"
   #:menu-path ("E&xamples" "&Tabs")

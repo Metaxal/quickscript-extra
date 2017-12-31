@@ -3,6 +3,8 @@
          racket/path
          quickscript/script)
 
+(script-help-string "Open the system's file browser in the current directory.")
+
 (define cmd
   (case (system-type 'os)
     [(unix)    "xdg-open"] ; or maybe mimeopen -n ?

@@ -2,6 +2,8 @@
 (require racket/string
          quickscript/script)
 
+(script-help-string "Sorts the selected lines in (anti-)alphabetical order.")
+
 (define ((sort-selection cmp) selection)
   (string-join (sort (string-split selection "\n" #:trim? #t)
                      cmp)

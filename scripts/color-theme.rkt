@@ -8,6 +8,8 @@
          racket/gui/base
          quickscript/script)
 
+(script-help-string "Display information about the current color theme.")
+
 (define-script show-theme
   #:label "Show color theme"
   #:menu-path ("&Utils")

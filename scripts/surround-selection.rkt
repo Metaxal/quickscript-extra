@@ -1,7 +1,7 @@
 #lang racket/base
 (require quickscript/script)
 
-;; See the manual in the Script/Help menu for more information.
+(script-help-string "(Example) Surround the selected text with various characters.")
 
 (define-script surround-with-dashes
   #:label "Surround with dashes"

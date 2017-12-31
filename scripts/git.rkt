@@ -6,6 +6,8 @@
          quickscript/script
          )
 
+(script-help-string "Some git commands (linux only). Currently meant as a demo.")
+
 ;; Modify this command to suit your needs
 (define (make-cmd sub-cmd)
   (string-append "xterm -hold -e '" (regexp-replace* #rx"'" sub-cmd "''") "'"))

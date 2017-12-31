@@ -4,6 +4,8 @@
          setup/dirs
          quickscript/script)
 
+(script-help-string "Open a file in DrRacket, starting in racket's collections base path.")
+
 ;; WARNING: This currently does not work because of `open-in-new-tab`
 ;; that requires a direct call to the frame in the initial namespace.
 ;; Needs a particular property to use the namespace anchor?

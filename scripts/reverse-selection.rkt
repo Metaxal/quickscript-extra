@@ -1,7 +1,7 @@
 #lang racket/base
 (require quickscript/script)
 
-;; See the manual in the Script/Help menu for more information.
+(script-help-string "(Example) The simplest script example: reverse the selected string.")
 
 (define-script reverse-selection
   #:label "Reverse selection"

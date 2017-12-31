@@ -5,7 +5,8 @@
          racket/port
          quickscript/script)
 
-;;; Laurent Orseau <laurent orseau gmail com> -- 2012-04-21
+(script-help-string
+ "Pick a color in the palette and insert it in DrRacket's current file.")
 
 (define-script color-chooser
   #:label "Color chooser"

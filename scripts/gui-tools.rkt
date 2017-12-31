@@ -1,6 +1,8 @@
 #lang at-exp racket/base
 (require quickscript/script)
 
+(script-help-string "Code snippets for racket/gui widgets. Meant as a demo.")
+
 (define-script add-frame
   #:label "Add frame"
   #:menu-path ("Gui tools")

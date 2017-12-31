@@ -3,8 +3,10 @@
          racket/class
          quickscript/script)
 
-(define-script new-menu
-  #:label "New menu"
+(script-help-string "(Example) Shows how to dynamically add a menu to DrRacket.")
+
+(define-script add-menu
+  #:label "Add menu"
   #:menu-path ("E&xamples")
   (λ(str #:frame fr) 
     (define menu-bar (send fr get-menu-bar))

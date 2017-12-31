@@ -1,10 +1,10 @@
 #lang racket/base
-(require quickscript/script
-         framework/gui-utils
+(require framework/gui-utils
          racket/gui 
-         racket/help)
+         racket/help
+         quickscript/script)
 
-;;; Laurent Orseau <laurent orseau gmail com> -- 2012-04-23
+(script-help-string "Replace patterns in the selected text using regular expressions.")
 
 (editor-set-x-selection-mode #t)
 

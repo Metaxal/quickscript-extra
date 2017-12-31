@@ -3,6 +3,8 @@
          racket/class
          quickscript/script)
 
+(script-help-string "Jump to a given line number in the current editor.")
+
 (define-script goto-line
   #:label "Go to &line..."
   (λ(str #:editor ed) 

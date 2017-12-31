@@ -1,6 +1,4 @@
 #lang racket/base
-(require quickscript/script)
-
 (require setup/xref
          scribble/xref
          scribble/manual-struct
@@ -8,7 +6,10 @@
          racket/list
          racket/format
          racket/string
-         racket/gui/base)
+         racket/gui/base
+         quickscript/script)
+
+(script-help-string "Displays a list of modules that `provide` the procedure under the cursor.")
 
 (define x (load-collections-xref))
 (define idx (xref-index x)) ; list of `entry's

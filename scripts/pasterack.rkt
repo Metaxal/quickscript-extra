@@ -2,6 +2,8 @@
 (require browser/external
          quickscript/script)
 
+(script-help-string "Opens Pasterack in the browser.")
+
 ; Launch http://pasterack.org/ in browser
 (define-script pasterack
   #:label "Pasterack (browser)"

@@ -1,17 +1,16 @@
 #lang racket/gui
-(require (prefix-in scrbl: scribble/reader)
-         racket/runtime-path
-         mrlib/close-icon
-         (for-syntax racket/base)
+(require (for-syntax racket/base)
+         (prefix-in scrbl: scribble/reader)
          framework
-                  
-         ; for srfi parsing
-         #;(only-in html read-html-as-xml)
-         #;(prefix-in x: xml)
-         
+         mrlib/close-icon
+         quickscript/script
+         racket/runtime-path
          setup/dirs ; for doc-dir 
-         srfi/13
-         quickscript/script)
+         srfi/13)
+
+(script-help-string
+ "Displays the signature of the procedure under the cursor
+(like DrRacket's blue box but works also when the file does not compile).")
 
 ;;;    ***************************************    ;;;
 ;;;    ***   On-Screen Signature Display   ***    ;;;

@@ -2,6 +2,9 @@
 (require racket/date
          quickscript/script)
 
+(script-help-string
+ "Insert text snippets with author, date, time, and licence.")
+
 ;;; 4 shortcuts to print the author [email] date [time] 
 ;;; Laurent Orseau <laurent orseau gmail com> -- 2012-04-19
 

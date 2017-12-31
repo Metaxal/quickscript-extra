@@ -4,6 +4,8 @@
          quickscript/script
          pict)
 
+(script-help-string "(Example) Insert a `pict` at the current position.")
+
 (define (pict->snip pic)
   (make-object image-snip% (pict->bitmap pic)))
 

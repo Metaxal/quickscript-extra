@@ -2,14 +2,15 @@
 (require srfi/13
          quickscript/script)
 
+(script-help-string "Indent rows on double-space-separated colums
+(video: https://www.youtube.com/watch?v=KJjVREsgnvA).")
+
 #|
 Laurent Orseau <laurent orseau gmail com> -- 2012-04-19
 
 This script indents elements as in a left-aligned table.
 Left indentation is preserved.
 The column separator is the double-space (in fact a space longer than 1).
-
-Demo: https://www.youtube.com/watch?v=KJjVREsgnvA
 
 For example (note the double-spaces):
 

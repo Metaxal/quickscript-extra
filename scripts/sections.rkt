@@ -3,9 +3,7 @@
          (only-in racket/gui/base get-text-from-user)
          quickscript/script)
 
-;;; Laurent Orseau <laurent orseau gmail com> -- 2012-04-21
-
-;;; Surrounds the selected text by comments ASCII frames.
+(script-help-string "Surrounds the selected text by comments ASCII frames.")
 ;;; Asks for input if nothing is selected.
 
 (define (surround-char str char [prefix ""] [suffix (string-reverse prefix)])

@@ -3,6 +3,8 @@
          racket/string
          quickscript/script)
 
+(script-help-string "(Example) Tweet the current selection. See the script file for configuration details.")
+
 ;;; HOW TO USE
 ;;; to use this you need to
 ;;;

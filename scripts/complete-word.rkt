@@ -4,10 +4,8 @@
          racket/list
          quickscript/script)
 
+(script-help-string "Word completion from a give user dictionary")
 ;;; Replaces the text abbreviation right before the caret by some expanded text
-;;; Laurent Orseau <laurent orseau gmail com> -- 2012-04-19
-
-;; TODO: Place selected text inside the inserted left and right parts.
 
 (define words
   '(("dsr"   "(define-syntax-rule (" ")\n  )")
