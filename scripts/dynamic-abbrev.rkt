@@ -5,7 +5,7 @@
          quickscript/script)
 
 (script-help-string
- "Cyclice word completion using the words of the current file.")
+ "Cyclic word completion using the words of the current file.")
 
 ;;; In the editor ed, removes the right-hand-side word part at the cursor position if any,
 ;;; and completes the left-hand-side word at the cursor position by the next possible
