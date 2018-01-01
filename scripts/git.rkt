@@ -28,6 +28,7 @@
 (define-script git-commit-file
   #:label "Commit &file"
   #:menu-path ("&Git")
+  #:os-types (unix)
   (lambda/dir-of-file (f)
    (define filename (file-name-from-path f))
    (cmd-system (string-append "git commit \"" (path->string filename) "\""))))
@@ -35,6 +36,7 @@
 (define-script git-add-file
   #:label "A&dd file"
   #:menu-path ("&Git")
+  #:os-types (unix)
   (lambda/dir-of-file (f)
    (define filename (file-name-from-path f))
    (cmd-system (string-append "git add \"" (path->string filename) "\""))))
@@ -42,6 +44,7 @@
 (define-script git-commit-all
   #:label "Commit &all"
   #:menu-path ("&Git")
+  #:os-types (unix)
   (lambda/dir-of-file (f)
    ; todo: save all files?
    (cmd-system "git commit -a")))
@@ -49,11 +52,13 @@
 (define-script git-push
   #:label "&Push"
   #:menu-path ("&Git")
+  #:os-types (unix)
   (lambda/dir-of-file (f)
    (cmd-system "git push")))
 
 (define-script git-pull-rebase
   #:label "P&ull --rebase"
   #:menu-path ("&Git")
+  #:os-types (unix)
   (lambda/dir-of-file (f)
    (cmd-system "git pull --rebase")))
