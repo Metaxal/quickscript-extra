@@ -80,7 +80,7 @@ If DrRacket is already running, click on
 
 * **pasterack**: Opens Pasterack in the browser.
 
-* **persistent-counter**: \(Example\) Shows how the ‘\#:peristent‘
+* **persistent-counter**: \(Example\) Shows how the ‘\#:persistent‘
   property works.
 
 * **provided-by**: Displays a list of modules that ‘provide‘ the

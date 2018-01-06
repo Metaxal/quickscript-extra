@@ -1,7 +1,7 @@
 #lang racket/base
 (require quickscript/script)
 
-(script-help-string "(Example) Shows how the `#:peristent` property works.")
+(script-help-string "(Example) Shows how the `#:persistent` property works.")
 
 (define count 0)
 
