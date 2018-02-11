@@ -42,12 +42,12 @@
                      (send cb2 set-value (fourth l))))]))
 (define hp1 (new horizontal-panel% [parent f]))
 (define t1 (new text-field% [parent hp1] [label "Replace:"]))
-(define cb1 (new check-box% [parent hp1] [label "protect?"]))
+(define cb1 (new check-box% [parent hp1] [label "Not regexp"]))
 (define hp2 (new horizontal-panel% [parent f]))
 (define t2 (new text-field% [parent hp2] [label "Replace:"]))
-; Hack: Setting the label afterwards allows to have the same size for both text-fields...
-(send t2 set-label "By:")
-(define cb2 (new check-box% [parent hp2] [label "protect?"]))
+; Hack: Setting the label afterwards ensures both fields have the same size.
+(send t2 set-label "With:")
+(define cb2 (new check-box% [parent hp2] [label "Not regexp"]))
 (define (ok-pressed b ev) 
   (send f show #f)
   (define t1-re ((if (send cb1 get-value) regexp-quote pregexp)
