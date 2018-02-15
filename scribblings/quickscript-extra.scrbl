@@ -1,10 +1,9 @@
 #lang scribble/manual
-@require[@for-label[quickscript-extra
-                    racket/base]]
+@require[@for-label[racket/base]]
 
 @title{quickscript-extra}
 @author{orseau}
 
 @defmodule[quickscript-extra]
 
-Package Description Here
+See @hyperlink["https://github.com/Metaxal/quickscript-extra/blob/master/README.md"]{github's README}.
