@@ -14,8 +14,15 @@ raco pkg install https://github.com/Metaxal/quickscript-extra.git
 ```
 
 Then register the new list of scripts in quickscript either by
-evaluating `(require quickscript-extra/register)` in DrRacket, or on the
-command line with `$` `racket` `-l` `quickscript-extra/register`.
+evaluating in DrRacket:
+```scheme
+(require quickscript-extra/register)
+```
+in DrRacket, or on the
+command line with 
+```shell
+$ racket -l quickscript-extra/register
+```
 
 If DrRacket is already running, click on
 `Scripts>Manage` `scripts>Compile` `scripts` `and` `reload` `menu`.
