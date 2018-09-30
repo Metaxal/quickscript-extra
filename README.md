@@ -13,11 +13,13 @@ Then evaluate:
 ```scheme
 (require quickscript-extra/register)
 ```
+to register `quickscript-extra`'s directory of script into `quickscript`.
+You only need to do that once.
 
 If DrRacket is already running, click on
 `Scripts>Manage` `scripts>Compile` `scripts` `and` `reload` `menu`.
 
-* Or from the coommand line:
+* Or from the command line:
 
 ```racket
 raco pkg install https://github.com/Metaxal/quickscript-extra.git
