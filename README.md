@@ -7,7 +7,7 @@ which must be installed first.
 
 * From DrRacket:
 
-In DrRacket, in `File>Package` `manager>Source`, type
+In DrRacket, in `File|Package` `manager|Source`, type
 `https://github.com/Metaxal/quickscript-extra.git`.
 Then evaluate:
 ```scheme
@@ -17,7 +17,7 @@ to register `quickscript-extra`'s directory of script into `quickscript`.
 You only need to do that once.
 
 If DrRacket is already running, click on
-`Scripts>Manage` `scripts>Compile` `scripts` `and` `reload` `menu`.
+`Scripts|Manage` `scripts|Compile` `scripts` `and` `reload` `menu`.
 
 * Or from the command line:
 
