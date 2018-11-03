@@ -13,7 +13,7 @@
     ("sr"    "(syntax-rules ()\n    [(_ " ")])")
     ("sc"    "(syntax-case stx ()\n    [(_ " ")])")
     ("dsm"   "(define-simple-macro (" ")\n  )")
-    ("lbd"   "(λ(" ")")
+    ("lbd"   "(λ (" ") ")
     ("param" "(parameterize ([current-" "])\n  )")
     ("wh"    "(with-handlers ([exn:" "])\n  )")
     ("wiff"  "(with-input-from-file " "\n  (λ _ ))")
@@ -31,7 +31,7 @@
   #:label "Auto-complete"
   #:shortcut #\/
   #:shortcut-prefix (ctl shift)
-  (λ(s #:editor ed)
+  (λ (s #:editor ed) 
     (define pos (send ed get-end-position)) 
     (define str
       (send ed get-text 

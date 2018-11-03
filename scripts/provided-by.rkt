@@ -15,7 +15,7 @@
 (define idx (xref-index x)) ; list of `entry's
 
 (define (search-approximate word)
-  (filter (λ(e)(regexp-match word (first (entry-words e)))) ; approximate search
+  (filter (λ (e) (regexp-match word (first (entry-words e)))) ; approximate search
           idx))
 
 (define (search-exact word)
@@ -44,7 +44,7 @@
   #:help-string "Displays in a message box the list of modules that provided the word under the cursor"
   #:persistent ; to avoid reloading it at each invokation
   #:output-to message-box
-  (λ(s #:editor ed)
+  (λ (s #:editor ed) 
     (define start-pos (send ed get-start-position))
     (define end-pos   (send ed get-end-position)) 
     (define start-exp-pos

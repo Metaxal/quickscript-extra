@@ -11,7 +11,7 @@
 (define-script color-chooser
   #:label "Color chooser"
   #:menu-path ("&Utils")
-  (λ(str)
+  (λ (str) 
     (define-values
       (r g b new-str)
       (match (port->list read (open-input-string str))

@@ -7,7 +7,7 @@
 ;;; Asks for input if nothing is selected.
 
 (define (surround-char str char [prefix ""] [suffix (string-reverse prefix)])
-  (let ([line (string-append prefix (build-string (+ 4 (string-length str)) (λ(i) char)) suffix "\n")])
+  (let ([line (string-append prefix (build-string (+ 4 (string-length str)) (λ (i)  char)) suffix "\n")])
     (string-append 
      line
      prefix (string char) " " str " " (string char) suffix "\n"
@@ -24,7 +24,7 @@
     #:menu-path ("Sele&ction" "Se&ctions")
     #:shortcut shortcut
     #:shortcut-prefix (ctl shift)
-    (λ(str)
+    (λ (str) 
       (define str2 (string-or-from-user label str))
       (and str2
            (begin body ...)))))
@@ -32,7 +32,7 @@
 (define-section (title "Title" #\1 str)
   (let* ([str (string-titlecase str)]
          [spaces (build-string (max 0 (quotient (- 77 (string-length str)) 2))
-                               (λ(n)#\space))])
+                               (λ (n) #\space))])
     (surround-char 
      (string-append spaces str spaces)
      #\* ";***")))

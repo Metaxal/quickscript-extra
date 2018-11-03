@@ -12,7 +12,7 @@
   #:label "Move left"
   #:menu-path ("E&xamples" "&Tabs")
   #:persistent ; for loading speed 
-  (λ(str #:frame fr)
+  (λ (str #:frame fr) 
     (send fr move-current-tab-left)
     #f))
 
@@ -20,7 +20,7 @@
   #:label "Move right"
   #:menu-path ("E&xamples" "&Tabs")
   #:persistent
-  (λ(str #:frame fr)
+  (λ (str #:frame fr) 
     (send fr move-current-tab-right)
     #f))
 
@@ -28,10 +28,10 @@
   #:label "Move to last"
   #:menu-path ("E&xamples" "&Tabs")
   #:persistent
-  (λ(str #:frame fr)
+  (λ (str #:frame fr) 
     (define cur-tab (send fr get-current-tab))
     (define tabs (send fr get-tabs))
-    (define cur-tab-idx (list-index (λ(t)(eq? t cur-tab)) tabs))
+    (define cur-tab-idx (list-index (λ (t) (eq? t cur-tab)) tabs))
     (send fr reorder-tabs 
           (append (remove cur-tab-idx (range (length tabs)))
                   (list cur-tab-idx)))
@@ -41,10 +41,10 @@
   #:label "Move to first"
   #:menu-path ("E&xamples" "&Tabs")
   #:persistent
-  (λ(str #:frame fr)
+  (λ (str #:frame fr) 
     (define cur-tab (send fr get-current-tab))
     (define tabs (send fr get-tabs))
-    (define cur-tab-idx (list-index (λ(t)(eq? t cur-tab)) tabs))
+    (define cur-tab-idx (list-index (λ (t) (eq? t cur-tab)) tabs))
     (send fr reorder-tabs 
           (cons cur-tab-idx
                 (remove cur-tab-idx (range (length tabs)))))
@@ -54,7 +54,7 @@
   #:label "Reverse tabs"
   #:menu-path ("E&xamples" "&Tabs")
   #:persistent
-  (λ(str #:frame fr)
+  (λ (str #:frame fr) 
     (send fr reorder-tabs 
           (reverse (range (length (send fr get-tabs)))))
     #f))

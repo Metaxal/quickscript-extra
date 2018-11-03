@@ -6,5 +6,5 @@
 (define-script reverse-selection
   #:label "Reverse selection"
   #:menu-path ("E&xamples")
-  (λ(selection)
+  (λ (selection) 
     (list->string (reverse (string->list selection)))))

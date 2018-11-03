@@ -9,6 +9,6 @@
   #:label "Pasterack (browser)"
   #:menu-path ("&Utils")
   #:help-string "Opens 'PasteRack' An evaluating pastebin for Racket."
-  (λ(str)
+  (λ (str) 
     (send-url "http://pasterack.org/")
     #f))

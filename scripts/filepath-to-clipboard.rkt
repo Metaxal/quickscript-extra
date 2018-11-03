@@ -1,5 +1,6 @@
 #lang racket/base
-(require quickscript/script)
+(require quickscript/script
+         racket/path)
 
 (script-help-string "Write the path of the current file in the clipboard.")
 
@@ -7,5 +8,12 @@
   #:label "Filepath to clipboard"
   #:menu-path ("&Utils")
   #:output-to clipboard
-  (λ(selection #:file f)
+  (λ (selection #:file f) 
     (path->string f)))
+
+(define-script directory-to-clipboard
+  #:label "File directory to clipboard"
+  #:menu-path ("&Utils")
+  #:output-to clipboard
+  (λ (selection #:file f) 
+    (path->string (path-only f))))

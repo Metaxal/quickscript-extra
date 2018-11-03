@@ -8,7 +8,7 @@
 (define-script add-menu
   #:label "Add menu"
   #:menu-path ("E&xamples")
-  (λ(str #:frame fr) 
+  (λ (str #:frame fr)  
     (define menu-bar (send fr get-menu-bar))
     (define menu (new menu% [parent menu-bar] [label "M&y Menu"]))
     (new menu-item% [parent menu] [label "&Remove me"]

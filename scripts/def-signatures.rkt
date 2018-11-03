@@ -133,7 +133,7 @@ The code is a mess, and I did not bother much to make it better...
 
 (define (read-rkt file)
   (with-input-from-file file
-    (λ()
+    (λ () 
       (void (read-language)) ; don't care about the #lang line
       ; no need to reverse since we don't care about the top level order:
       (let loop ([l '()])
@@ -155,7 +155,7 @@ The code is a mess, and I did not bother much to make it better...
   (when debug? (printf "File ~a\n" file))
   (define all 
     (with-input-from-file file
-      (λ()(read-scrbl (current-input-port) file))))
+      (λ () (read-scrbl (current-input-port) file))))
   (parse-list dic all))
 
 ;; takes a list of x-exprs, parses it, and add found form to the dictionary
@@ -180,7 +180,7 @@ The code is a mess, and I did not bother much to make it better...
   
   (define (add-doc/names id cont-args args args+vals cont-out)
     (add-entry id (list 'defproc id 
-                        (map (λ(a c)
+                        (map (λ (a c) 
                                (if (and (list? c) (keyword? (first c)))
                                    ; with keyword:
                                    (list* (first c) (first a)
@@ -342,7 +342,7 @@ Do you want to recreate the index?"
       (let* ([dic (make-hash)]
              [fr (frame-message "Making index" "Constructing documentation index for the first time.\nPlease wait..." #t)]
              [read-scrbl-dir 
-              (λ(dir)
+              (λ (dir) 
                 (when (directory-exists? dir)
                   (for ([f (in-directory dir)])
                     (when (equal? (filename-extension f) #"scrbl")
@@ -371,7 +371,7 @@ Do you want to recreate the index?"
 
         ; write the generated dict to a file for speed up on next loadings:        
         (with-output-to-file idx-file
-          (λ()(write dic)))
+          (λ () (write dic)))
         
         (send fr show #f)
         dic)))
@@ -586,7 +586,7 @@ Do you want to recreate the index?"
     
     (define cv (new tooltip-canvas% [parent hp]
                     [paint-callback 
-                     (λ(cv dc)(draw-text dc 0 0 text))]))
+                     (λ (cv dc) (draw-text dc 0 0 text))]))
     
     (define/public (set-text t)
       (set! text t)
@@ -619,7 +619,7 @@ Do you want to recreate the index?"
   #:shortcut #\$
   #:shortcut-prefix (ctl)
   #:persistent
-  (λ(str #:editor ed)
+  (λ (str #:editor ed) 
     (define start-pos (send ed get-start-position))
     (define end-pos   (send ed get-end-position)) 
     (define start-exp-pos

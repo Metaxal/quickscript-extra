@@ -21,7 +21,7 @@ The full history is saved, so the user can get back like in an undo list.
   #:label "view hash"
   #:menu-path ("Bookmarks")
   #:persistent
-  (λ(str)
+  (λ (str) 
     (message-box "save-current-line!" (~a saved-lines))
     #f))
 
@@ -30,7 +30,7 @@ The full history is saved, so the user can get back like in an undo list.
   #:label "Save line number"
   #:menu-path ("Bookmarks")
   #:persistent
-  (λ(str #:editor ed)
+  (λ (str #:editor ed) 
     (save-current-line! ed)
     #f))
 
@@ -41,7 +41,7 @@ The full history is saved, so the user can get back like in an undo list.
   #:shortcut f9
   #:shortcut-prefix (shift)
   #:persistent
-  (λ(str #:editor ed) 
+  (λ (str #:editor ed)  
     (define line (get-text-from-user "Go to line" "Line number:"
                                      #:validate string->number))
     (define lnum (and line (string->number line)))
@@ -57,7 +57,7 @@ The full history is saved, so the user can get back like in an undo list.
   #:shortcut f9
   #:shortcut-prefix (ctl shift)
   #:persistent
-  (λ(str #:editor ed)
+  (λ (str #:editor ed) 
     (define ln (pop-saved-line! ed))
     (when ln 
       (ed-goto-line ed ln))
@@ -70,7 +70,7 @@ The full history is saved, so the user can get back like in an undo list.
   #:shortcut f9
   #:shortcut-prefix ()
   #:persistent
-  (λ(str #:definitions ed) 
+  (λ (str #:definitions ed)  
     (bookmark-frame (get-marks ed) ed)
     #f))
 
@@ -90,7 +90,7 @@ The full history is saved, so the user can get back like in an undo list.
   #:menu-path ("Bookmarks")
   #:shortcut f9
   #:shortcut-prefix (ctl)
-  (λ(str)
+  (λ (str) 
     (string-append ";@@ " (if (string=? str "") 
                               (format "bookmark name")
                               str))))
@@ -100,7 +100,7 @@ The full history is saved, so the user can get back like in an undo list.
 
 (define (save-current-line! ed)
   (define ln (send ed position-paragraph (send ed get-start-position)))
-  (hash-update! saved-lines ed (λ(l)(cons ln l)) '()))
+  (hash-update! saved-lines ed (λ (l) (cons ln l)) '()))
 
 (define (pop-saved-line! ed)
   (define lines (hash-ref! saved-lines ed '()))
@@ -137,7 +137,7 @@ The full history is saved, so the user can get back like in an undo list.
   (define lb (new list-box% [label #f]
                   [parent fr]
                   [choices (map second marks)] ; show line number too?
-                  [callback (λ(lb ev)
+                  [callback (λ (lb ev) 
                               (print (send ev get-event-type))
                               (when (eq? (send ev get-event-type) 'list-box-dclick)
                                 (list-box-select lb)))]

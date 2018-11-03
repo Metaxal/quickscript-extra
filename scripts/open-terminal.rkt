@@ -9,7 +9,7 @@
   #:label "Open terminal here"
   #:menu-path ("&Utils")
   #:os-types (unix)
-  (λ(str #:file f) 
+  (λ (str #:file f)  
     (define dir (path->string (path-only f)))
     (system (string-append "gnome-terminal"
                            " --working-directory=\"" dir "\""

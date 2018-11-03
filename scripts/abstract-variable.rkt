@@ -8,7 +8,7 @@
 (define-script abstract-variable
   #:label "&Abstract variable"
   #:menu-path ("Sele&ction")
-  (λ(str)
+  (λ (str) 
     (cond
       [(string=? str "")
        (message-box "Empty selection"
@@ -17,7 +17,7 @@
                     '(ok caution))]
       [else
        (define var (get-text-from-user "Variable Abstraction" "Variable name:"
-                                       #:validate (λ(s)#t)))
+                                       #:validate (λ (s) #t)))
        (if var
            (begin
              (send the-clipboard set-clipboard-string 

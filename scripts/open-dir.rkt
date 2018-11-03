@@ -15,6 +15,6 @@
 (define-script open-file-directory
   #:label "Open file directory"
   #:menu-path ("&Utils")
-  (λ(str #:file f)
+  (λ (str #:file f) 
     (system (string-append cmd " \"" (path->string (path-only f)) "\""))
     #f))

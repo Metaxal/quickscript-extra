@@ -7,18 +7,18 @@
   #:label "Surround with dashes"
   #:menu-path ("E&xamples" "&Surround")
   #:help-string "Surrounds the selection with dashes"
-  (λ(selection)
+  (λ (selection) 
     (string-append "-" selection "-")))
 
 (define-script surround-with-stars
   #:label "Surround with stars"
   #:menu-path ("E&xamples" "&Surround")
   #:help-string "Surrounds the selection with stars"
-  (λ(selection)
+  (λ (selection) 
     (string-append "*" selection "*")))
 
 (define-script surround-with-slashes
   #:menu-path ("E&xamples" "&Surround")
   #:label "Surround with slashes"
-  (λ(selection)
+  (λ (selection) 
     (string-append "/" selection "/")))

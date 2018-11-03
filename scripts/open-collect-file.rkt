@@ -13,7 +13,7 @@
 (define-script open-collects-file
   #:label "Open collects file"
   #:menu-path ("&Utils")
-  (λ(str #:frame frame)
+  (λ (str #:frame frame) 
     (define f (get-file "Open a script" #f (find-collects-dir) #f #f '() 
                         '(("Racket" "*.rkt"))))
     (when f

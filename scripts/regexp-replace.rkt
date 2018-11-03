@@ -32,7 +32,7 @@
   (new choice% [parent f]
        [label #f #;"Templates:"]
        [choices (map car templates)]
-       [callback (λ(ch ev)
+       [callback (λ (ch ev) 
                    (define sel (send ch get-string-selection))
                    (define l (and sel (dict-ref templates sel)))
                    (when l
@@ -76,7 +76,7 @@
   #:shortcut #\h
   #:shortcut-prefix (ctl)
   #:persistent
-  (λ(str)
+  (λ (str) 
     (set! str-in str)
     (set! str-out #f)
     (send t1 focus)

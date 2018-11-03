@@ -10,7 +10,7 @@
   #:menu-path ("E&xamples" "&Counter")
   #:persistent
   #:output-to message-box
-  (λ(selection)
+  (λ (selection) 
     (set! count (+ count 1))
     (number->string count)))
 
@@ -19,12 +19,12 @@
   #:menu-path ("E&xamples" "&Counter")
   #:persistent
   #:output-to message-box
-  (λ(selection)
+  (λ (selection) 
     (number->string count)))
 
 (define-script show-counter/non-persistent
   #:label "S&how counter (non-persistent)"
   #:menu-path ("E&xamples" "&Counter")
   #:output-to message-box
-  (λ(selection)
+  (λ (selection) 
     (number->string count)))

@@ -28,29 +28,29 @@
 (define-script author-date
   #:label "Author &date"
   #:menu-path ("Author date")
-  (λ(str)(author-date-all #f #f)))
+  (λ (str) (author-date-all #f #f)))
 
 (define-script author-date-time
   #:label "Author date &time"
   #:menu-path ("Author date")
-  (λ(str)(author-date-all #f #t)))
+  (λ (str) (author-date-all #f #t)))
 
 (define-script author-email-date
   #:label "Author &email date"
   #:menu-path ("Author date")
-  (λ(str)(author-date-all #t #f)))
+  (λ (str) (author-date-all #t #f)))
 
 (define-script author-email-date-time
   #:label "A&uthor email date time"
   #:menu-path ("Author date")
-  (λ(str)(author-date-all #t #t)))
+  (λ (str) (author-date-all #t #t)))
 
 (define-script license-wtfpl
   #:label "&WTFPL"
   #:menu-path ("Author date")
-  (λ(str)"License: WTFPL - http://www.wtfpl.net"))
+  (λ (str) "License: WTFPL - http://www.wtfpl.net"))
 
 (define-script license-mit
   #:label "&MIT License"
   #:menu-path ("Author date")
-  (λ(str)"License: MIT - http://opensource.org/licenses/MIT"))
+  (λ (str) "License: MIT - http://opensource.org/licenses/MIT"))

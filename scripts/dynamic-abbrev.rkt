@@ -43,7 +43,7 @@
   #:label "D&ynamic completion"
   #:shortcut #\t
   #:shortcut-prefix (ctl shift)
-  (λ(s #:editor ed)
+  (λ (s #:editor ed) 
     (define pos (send ed get-end-position)) 
     (define left  (get-word ed pos -1))
     (define right (get-word ed pos  1))

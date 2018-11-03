@@ -7,7 +7,7 @@
 
 (define-script goto-line
   #:label "Go to &line..."
-  (λ(str #:editor ed) 
+  (λ (str #:editor ed)  
     (define line-str (get-text-from-user "Goto line" "Line number:"
                                          #f
                                          (number->string 

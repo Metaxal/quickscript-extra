@@ -12,7 +12,7 @@
 (define-script insert-slideshow
   #:label "Insert slideshow pict"
   #:menu-path ("E&xamples")
-  (λ(str)
+  (λ (str) 
     (pict->snip
      (hc-append -10
                 (colorize (angel-wing 100 80 #t) "orange")

@@ -18,7 +18,7 @@
   #:label "Tweet"
   #:menu-path ("Sele&ction")
   #:output-to message-box
-  (λ(str #:frame fr)
+  (λ (str #:frame fr) 
     (define keys (map getenv env-keys))
     (if (member #f keys)
         (string-append "Please set the following environment variables\n"

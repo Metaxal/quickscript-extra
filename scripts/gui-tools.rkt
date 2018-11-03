@@ -6,7 +6,7 @@
 (define-script add-frame
   #:label "Add frame"
   #:menu-path ("Gui tools")
-  (λ(str)
+  (λ (str) 
     (set! str (if (string=? str "") "my-frame" str))
 @string-append{
 (define @str
@@ -18,7 +18,7 @@
 (define-script add-message
   #:label "Add message"
   #:menu-path ("Gui tools")
-  (λ(str)
+  (λ (str) 
     (set! str (if (string=? str "") "my-message" str))
     @string-append{
 (new message% [parent #f] [label "@str"])

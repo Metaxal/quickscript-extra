@@ -13,7 +13,7 @@
 (define-script show-theme
   #:label "Show color theme"
   #:menu-path ("&Utils")
-  (λ(str)
+  (λ (str) 
     (theme->frame)
     #f))
 
@@ -83,7 +83,7 @@
 
 (define (theme->file-string [theme (get-current-theme)])
   (with-output-to-string
-   (λ()(displayln "#lang info\n")
+   (λ () (displayln "#lang info\n")
      (pretty-print
       `(define framework:color-schemes 
          '(,(theme->hash theme)))
