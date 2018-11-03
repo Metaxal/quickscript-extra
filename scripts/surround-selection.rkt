@@ -1,5 +1,5 @@
 #lang racket/base
-(require quickscript/script)
+(require quickscript)
 
 (script-help-string "(Example) Surround the selected text with various characters.")
 

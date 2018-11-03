@@ -1,5 +1,5 @@
 #lang racket/base
-(require quickscript/script)
+(require quickscript)
 
 (script-help-string "(Example) The simplest script example: reverse the selected string.")
 

@@ -1,5 +1,5 @@
 #lang racket/base
-(require quickscript/script
+(require quickscript
          racket/path)
 
 (script-help-string "Write the path of the current file in the clipboard.")

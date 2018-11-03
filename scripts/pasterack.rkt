@@ -1,6 +1,6 @@
 #lang racket/base
 (require browser/external
-         quickscript/script)
+         quickscript)
 
 (script-help-string "Opens Pasterack in the browser.")
 

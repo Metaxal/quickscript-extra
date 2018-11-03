@@ -2,7 +2,7 @@
 (require racket/class
          racket/dict
          racket/list
-         quickscript/script)
+         quickscript)
 
 (script-help-string "Word completion from a give user dictionary")
 ;;; Replaces the text abbreviation right before the caret by some expanded text

@@ -2,7 +2,7 @@
 (require framework/gui-utils
          racket/gui 
          racket/help
-         quickscript/script)
+         quickscript)
 
 (script-help-string "Replace patterns in the selected text using regular expressions.")
 

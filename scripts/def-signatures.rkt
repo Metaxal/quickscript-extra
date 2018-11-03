@@ -3,7 +3,7 @@
          (prefix-in scrbl: scribble/reader)
          framework
          mrlib/close-icon
-         quickscript/script
+         quickscript
          racket/runtime-path
          setup/dirs ; for doc-dir 
          srfi/13)

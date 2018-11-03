@@ -1,7 +1,7 @@
 #lang racket/base
 (require racket/list
          racket/string
-         quickscript/script)
+         quickscript)
 
 (script-help-string "(Example) Tweet the current selection. See the script file for configuration details.")
 

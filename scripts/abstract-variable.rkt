@@ -1,6 +1,6 @@
 #lang racket/base
 (require racket/gui
-         quickscript/script)
+         quickscript)
 
 (script-help-string
  "Create a variable from the selected expression (video: https://www.youtube.com/watch?v=qgjAZd4eBBY).")

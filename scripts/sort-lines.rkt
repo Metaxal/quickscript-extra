@@ -1,6 +1,6 @@
 #lang racket/base
 (require racket/string
-         quickscript/script)
+         quickscript)
 
 (script-help-string "Sorts the selected lines in (anti-)alphabetical order.")
 

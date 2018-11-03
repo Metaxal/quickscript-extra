@@ -1,6 +1,6 @@
 #lang racket/base
 (require racket/date
-         quickscript/script)
+         quickscript)
 
 (script-help-string
  "Insert text snippets with author, date, time, and licence.")

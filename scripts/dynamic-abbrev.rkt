@@ -2,7 +2,7 @@
 (require racket/class
          racket/list
          racket/format
-         quickscript/script)
+         quickscript)
 
 (script-help-string
  "Cyclic word completion using the words of the current file.")

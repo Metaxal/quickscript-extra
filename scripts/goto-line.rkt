@@ -1,7 +1,7 @@
 #lang racket/base
 (require racket/gui/base
          racket/class
-         quickscript/script)
+         quickscript)
 
 (script-help-string "Jump to a given line number in the current editor.")
 

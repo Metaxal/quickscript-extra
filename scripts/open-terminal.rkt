@@ -1,7 +1,7 @@
 #lang racket/base
 (require racket/system
          racket/path
-         quickscript/script)
+         quickscript)
 
 (script-help-string "Open a terminal in the current directory (linux only).")
 

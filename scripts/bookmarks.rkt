@@ -1,5 +1,5 @@
 #lang racket/gui
-(require quickscript/script)
+(require quickscript)
 
 (script-help-string "Quickly navigate between lines")
 

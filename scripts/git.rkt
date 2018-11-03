@@ -3,7 +3,7 @@
          racket/class
          racket/system
          racket/path
-         quickscript/script
+         quickscript
          )
 
 (script-help-string "Some git commands (linux only). Currently meant as a demo.")

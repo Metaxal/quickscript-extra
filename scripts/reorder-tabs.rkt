@@ -3,7 +3,7 @@
          racket/list
          racket/format
          racket/gui/base
-         quickscript/script
+         quickscript
          (only-in srfi/1 list-index))
 
 (script-help-string "(Example) Move DrRacket's tabs around.")

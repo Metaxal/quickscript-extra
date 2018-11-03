@@ -3,7 +3,7 @@
          racket/class
          racket/match
          racket/port
-         quickscript/script)
+         quickscript)
 
 (script-help-string
  "Pick a color in the palette and insert it in DrRacket's current file.")

@@ -1,5 +1,5 @@
 #lang racket/base
-(require quickscript/script
+(require quickscript
          racket/class)
 
 (script-help-string "(Example) displays the number of opened tabs in a message box.")

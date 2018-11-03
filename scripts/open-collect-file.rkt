@@ -2,7 +2,7 @@
 (require racket/gui/base
          racket/class
          setup/dirs
-         quickscript/script)
+         quickscript)
 
 (script-help-string "Open a file in DrRacket, starting in racket's collections base path.")
 

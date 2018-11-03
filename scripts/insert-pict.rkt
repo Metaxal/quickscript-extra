@@ -1,7 +1,7 @@
 #lang racket/base
 (require racket/class 
          racket/gui/base
-         quickscript/script
+         quickscript
          pict)
 
 (script-help-string "(Example) Insert a `pict` at the current position.")

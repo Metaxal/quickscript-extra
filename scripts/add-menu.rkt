@@ -1,7 +1,7 @@
 #lang racket/base
 (require racket/gui/base
          racket/class
-         quickscript/script)
+         quickscript)
 
 (script-help-string "(Example) Shows how to dynamically add a menu to DrRacket.")
 

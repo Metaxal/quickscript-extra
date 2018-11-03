@@ -1,5 +1,5 @@
 #lang racket/base
-(require quickscript/script)
+(require quickscript)
 
 (script-help-string "(Example) Shows how the `#:persistent` property works.")
 

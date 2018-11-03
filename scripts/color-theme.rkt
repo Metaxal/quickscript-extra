@@ -6,7 +6,7 @@
          racket/port
          racket/pretty
          racket/gui/base
-         quickscript/script)
+         quickscript)
 
 (script-help-string "Display information about the current color theme.")
 

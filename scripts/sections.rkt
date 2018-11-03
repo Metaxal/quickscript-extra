@@ -1,7 +1,7 @@
 #lang racket/base
 (require srfi/13
          (only-in racket/gui/base get-text-from-user)
-         quickscript/script)
+         quickscript)
 
 (script-help-string "Surrounds the selected text by comments ASCII frames.")
 ;;; Asks for input if nothing is selected.

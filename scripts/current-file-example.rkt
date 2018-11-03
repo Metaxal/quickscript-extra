@@ -1,5 +1,5 @@
 #lang racket/base
-(require quickscript/script)
+(require quickscript)
 
 (script-help-string
  "(Example) Displays the current file and the current selected string in a message box.")

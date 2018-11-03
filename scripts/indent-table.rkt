@@ -1,7 +1,7 @@
 #lang racket
 (require (only-in srfi/13 string-pad-right)
          racket/gui/base
-         quickscript/script)
+         quickscript)
 
 (script-help-string "Indent rows on double-space-separated colums
 (video: https://www.youtube.com/watch?v=KJjVREsgnvA).")

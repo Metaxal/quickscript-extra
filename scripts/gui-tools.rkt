@@ -1,5 +1,5 @@
 #lang at-exp racket/base
-(require quickscript/script)
+(require quickscript)
 
 (script-help-string "Code snippets for racket/gui widgets. Meant as a demo.")
 

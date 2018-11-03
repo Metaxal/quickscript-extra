@@ -1,6 +1,6 @@
 #lang racket/base
 (require racket/class
-         quickscript/script)
+         quickscript)
 
 
 (script-help-string
