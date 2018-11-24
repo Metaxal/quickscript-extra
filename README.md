@@ -5,30 +5,22 @@ which must be installed first.
 
 ## 1. Installation
 
-* From DrRacket:
+In DrRacket, in `File|Package manager|Source`, type
+`https://github.com/Metaxal/quickscript-extra.git`, then register the
+new collection of scripts in Quickscript by evaluating `(require
+quickscript-extra/register)` in DrRacket.
 
-In DrRacket, in `File|Package` `manager|Source`, type
-`https://github.com/Metaxal/quickscript-extra.git`.
-Then evaluate:
-```scheme
-(require quickscript-extra/register)
-```
-to register `quickscript-extra`'s directory of script into `quickscript`.
-You only need to do that once.
-
-If DrRacket is already running, click on
-`Scripts|Manage` `scripts|Compile` `scripts` `and` `reload` `menu`.
-
-* Or from the command line:
+Or, on the command line, type:
 
 ```racket
 raco pkg install https://github.com/Metaxal/quickscript-extra.git
 ```
-Then register the new list of scripts in quickscript either by
-evaluating in DrRacket:
-```shell
-$ racket -l quickscript-extra/register
-```
+
+then register the new collection of scripts in Quickscript by evaluating
+`$` `racket` `-l` `quickscript-extra/register`.
+
+If DrRacket is already running, click on `Scripts|Manage
+scripts|Compile` `scripts` `and` `reload` `menu`.
 
 ## 2. Scripts
 
@@ -40,6 +32,9 @@ $ racket -l quickscript-extra/register
 
 * **author-date**: Insert text snippets with author, date, time, and
   licence.
+
+* **backup-file**: Copies the current file in the ’backups’ subdirectory
+  with a time stamp
 
 * **bookmarks**: Quickly navigate between lines
 
@@ -57,7 +52,7 @@ $ racket -l quickscript-extra/register
   cursor \(like DrRacket’s blue box but works also when the file does
   not compile\).
 
-* **dynamic-abbrev**: Cyclice word completion using the words of the
+* **dynamic-abbrev**: Cyclic word completion using the words of the
   current file.
 
 * **enter-submod**: Easily enter a submodule \(main, test, drracket,
