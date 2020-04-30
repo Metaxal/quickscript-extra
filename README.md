@@ -6,18 +6,13 @@ which must be installed first.
 ## 1. Installation
 
 In DrRacket, in `File|Package manager|Source`, type
-`https://github.com/Metaxal/quickscript-extra.git`, then register the
-new collection of scripts in Quickscript by evaluating `(require
-quickscript-extra/register)` in DrRacket.
+`https://github.com/Metaxal/quickscript-extra.git`.
 
 Or, on the command line, type:
 
 ```racket
-raco pkg install https://github.com/Metaxal/quickscript-extra.git
+raco pkg install quickscript-extra
 ```
-
-then register the new collection of scripts in Quickscript by evaluating
-`$` `racket` `-l` `quickscript-extra/register`.
 
 If DrRacket is already running, click on `Scripts|Manage
 scripts|Compile` `scripts` `and` `reload` `menu`.
