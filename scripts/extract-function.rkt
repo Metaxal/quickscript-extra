@@ -180,10 +180,11 @@
     (λ (port)
       (module-port->syntax port f))))
 
+;; TODO: When require local file "file.rkt", it thinks it's in the wrong dir
 (define (module-string->syntax str [source #f])
   (call-with-input-string str
-    (λ (port)
-      (module-port->syntax port (or source (build-path (current-directory) "dummy.rkt"))))))
+      (λ (port)
+        (module-port->syntax port (or source (build-path (current-directory) "dummy.rkt"))))))
 
 
 ;=============;
@@ -378,51 +379,58 @@
                       "Buffer has changed since extract-function"
                       fr '(ok stop))]
         [else
-         (define module-stx
-           (with-handlers ([exn:fail:read?
-                            (λ (e)
-                              (message-box "Error"
-                                           (string-append "Syntax error while reading file: "
-                                                          (exn-message e))
-                                           fr '(ok stop))
-                              #f)])
-             (module-string->syntax txt f)))
+         ;; Setting the current-directory to that of f
+         ;; ensures that read-syntax and syncheck have access to
+         ;; local requires.
+         (parameterize ([current-directory (if f
+                                             (path-only f)
+                                             (current-directory))])
+    
+           (define module-stx
+             (with-handlers ([exn:fail:read?
+                              (λ (e)
+                                (message-box "Error"
+                                             (string-append "Syntax error while reading file: "
+                                                            (exn-message e))
+                                             fr '(ok stop))
+                                #f)])
+               (module-string->syntax txt f)))
       
-         (when module-stx
+           (when module-stx
 
-           (define module-scope (syntax-scope module-stx))
+             (define module-scope (syntax-scope module-stx))
         
-           (define to-pos (send ed get-start-position))
+             (define to-pos (send ed get-start-position))
 
-           ;; TODO: Prevent moving to a place where the definition is unreachable
-           ;; from the call site.
-           ;; We could check that the smallest enclosing scope of to-pos
-           ;; also contains from-scope.
-           ;; May fail with `begin`, but better to prevent some legal cases than
-           ;; allow illegal ones? Or give a warning and the option?
+             ;; TODO: Prevent moving to a place where the definition is unreachable
+             ;; from the call site.
+             ;; We could check that the smallest enclosing scope of to-pos
+             ;; also contains from-scope.
+             ;; May fail with `begin`, but better to prevent some legal cases than
+             ;; allow illegal ones? Or give a warning and the option?
 
-           (define from-scope (scope start end))
+             (define from-scope (scope start end))
 
-           (define-values (in-unbounds out-unbounds)
-             ; min with module-scope as the whitespaces at the end of the module
-             ; are considered out of scope otherwise.
-             (unbound-ids module-stx from-scope to-pos))
-           ;; TODO: remove-duplicates is slow, also unbound-ids returns too many things?
-           (define in-ids  (remove-duplicates (map first in-unbounds)))
-           (define out-ids (remove-duplicates (map first out-unbounds)))
+             (define-values (in-unbounds out-unbounds)
+               ; min with module-scope as the whitespaces at the end of the module
+               ; are considered out of scope otherwise.
+               (unbound-ids module-stx from-scope to-pos))
+             ;; TODO: remove-duplicates is slow, also unbound-ids returns too many things?
+             (define in-ids  (remove-duplicates (map first in-unbounds)))
+             (define out-ids (remove-duplicates (map first out-unbounds)))
 
-           (define from-string (send ed get-text start end))
-           (define-values (call-site fun-site)
-             (make-call+fun-sites from-string fun-name in-ids out-ids))
+             (define from-string (send ed get-text start end))
+             (define-values (call-site fun-site)
+               (make-call+fun-sites from-string fun-name in-ids out-ids))
 
-           (send ed begin-edit-sequence)
-           (send ed delete start end)
-           (send ed insert call-site start)
-           (send ed tabify-selection start (+ start (string-length call-site)))
+             (send ed begin-edit-sequence)
+             (send ed delete start end)
+             (send ed insert call-site start)
+             (send ed tabify-selection start (+ start (string-length call-site)))
            
-           (define new-pos (send ed get-start-position))
-           (send ed insert fun-site)
-           (send ed tabify-selection new-pos (+ new-pos (string-length fun-site)))
-           (send ed end-edit-sequence))]))
+             (define new-pos (send ed get-start-position))
+             (send ed insert fun-site)
+             (send ed tabify-selection new-pos (+ new-pos (string-length fun-site)))
+             (send ed end-edit-sequence)))]))
     #f))
 
