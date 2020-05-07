@@ -74,8 +74,9 @@
 
 ;; Returns a dict of scope -> source-scope
 ;; The only function that uses check-syntax (show-content)
-(define (syntax->source-scope-dict mod-stx)
-  (define h (make-hash))
+(define (syntax->source+mutation-dicts mod-stx)
+  (define hsource (make-hash))
+  (define hmutation (make-hash))
   (for ([v (in-list (show-content mod-stx))])
     (match v
       [(vector 'syncheck:add-arrow/name-dup/pxpy
@@ -86,47 +87,51 @@
                require-arrow
                name-dup?)
        (define start-scope (scope start-left start-right))
-       (hash-set! h start-scope start-scope)
-       (hash-set! h (scope end-left end-right) start-scope)]
-      [else '()]))
-  h)
+       (hash-set! hsource start-scope start-scope)
+       (hash-set! hsource (scope end-left end-right) start-scope)]
+      [(vector 'syncheck:add-mouse-over-status start end "mutated variable")
+       (hash-set! hmutation (scope start end) #t)]
+      [else (void)]))
+  (values hsource hmutation))
 
 ;; Returns two lists:
 ;; The list of ids that are bound in from-scope but won't be bound in dest-pos,
 ;; and the list of ids outside of from-scope that are defined in from-scope
 ;; but will be undefined after moving the code to dest-pos.
+;; Each list is made of an id an whether it is mutated.
 (define (unbound-ids mod-stx from-scope dest-pos)
   ;; if dest-pos is after the scope of the module, 
   (set! dest-pos dest-pos)
-  (define source-scope-dict (syntax->source-scope-dict mod-stx))
+  (define-values (source-dict mutation-dict)
+    (syntax->source+mutation-dicts mod-stx))
   (define sym+scopes (id-scopes mod-stx))
   (define to-scope (smallest-common-scope mod-stx dest-pos))
-  (values
-   ;; ids in from-scope that will become unbound at dest-pos
-   (filter-map
-    (λ (s)
-      (define sym-scope (second s))
-      (define sym-start (scope-start sym-scope))
-      (and (in-scope? sym-start from-scope)
-           (let ([src (dict-ref source-scope-dict sym-scope #f)])
-             (and src
-                  (not (in-scope? (scope-start src) from-scope))
-                  (let ([sym-def-scope (smallest-common-scope mod-stx sym-start (scope-start src))])
-                    (and (not (in-scope? dest-pos sym-def-scope #:strict? #t))
-                         (list (first s) sym-scope src)))))))
-    sym+scopes)
-   ;; ids outside of from-scope that will become unbound once
-   ;; the code is moved to dest-pos
-   (filter-map
-    (λ (s)
-      (define sym-scope (second s))
-      (define sym-start (scope-start sym-scope))
-      (and (not (in-scope? sym-start from-scope))
-           (let ([src (dict-ref source-scope-dict sym-scope #f)])
-             (and src
-                  (in-scope? (scope-start src) from-scope)
-                  (list (first s) sym-scope src)))))
-    sym+scopes)))
+  ;; ids in from-scope that will become unbound at dest-pos
+  (define ins '())
+  ;; ids outside of from-scope that will become unbound once
+  ;; the code is moved to dest-pos
+  (define outs '())
+  (for ([s (in-list sym+scopes)])
+    (define sym (first s))
+    (define sym-scope (second s))
+    (define sym-start (scope-start sym-scope))
+    (define src (dict-ref source-dict sym-scope #f))
+    (when (and (in-scope? sym-start from-scope)
+               (and src
+                    (not (in-scope? (scope-start src) from-scope))
+                    (let ([sym-def-scope (smallest-common-scope mod-stx sym-start (scope-start src))])
+                      (not (in-scope? dest-pos sym-def-scope #:strict? #t)))))
+      (define entry (list sym (dict-ref mutation-dict src #f)))
+      (unless (member entry ins)
+        (set! ins (cons entry ins))))
+    (when (and (not (in-scope? sym-start from-scope))
+               (and src
+                    (in-scope? (scope-start src) from-scope)))
+      (define entry (list sym (dict-ref mutation-dict src #f)))
+      (unless (member entry outs)
+        (set! outs (cons entry outs)))))
+  (values (reverse ins)
+          (reverse outs)))
 
 ;; Returns the smallest scope of a list containing all positions of pos-or-scope-list.
 ;; If fix is not #f and the smallest common scope is the scope of the module,
@@ -221,9 +226,10 @@
              ...)
        (define stx (module-string->syntax txt))
        (define sym+scopes (id-scopes stx))
-       (define d (syntax->source-scope-dict stx))
+       (define-values (source-dict mutation-dict)
+         (syntax->source+mutation-dicts stx))
        (let ([scopes-from-syncheck (map second sym+scopes)])
-         (for ([(k v) (in-dict d)])
+         (for ([(k v) (in-dict source-dict)])
            (check member k scopes-from-syncheck)
            (check member v scopes-from-syncheck))
          (for ([from-scope         (in-list from-scopes)]
@@ -244,12 +250,8 @@
                (unbound-ids stx from-scope dest-pos))
              (define info2
                (format "~a dest-pos: ~a" info1 dest-pos))
-             (check-equal? (remove-duplicates (map first in-ids))
-                           expected-ins
-                           info2)
-             (check-equal? (remove-duplicates (map first out-ids))
-                           expected-outs
-                           info2))))]))
+             (check-equal? in-ids  expected-ins info2)
+             (check-equal? out-ids expected-outs info2))))]))
 
   
   (test-prog
@@ -268,15 +270,15 @@
      (list (scope 41 99) ; from-scope
            (scope 28 126) ; common-from-scope
            '(13 26 126 128) ; dest-pos
-           '(e) '(b c)) ; expected-ins expected-outs
+           '([e #f]) '([b #f] [c #f])) ; expected-ins expected-outs, #f = not mutated
      (list (scope 41 99)
            (scope 28 126)
            '(28)
-           '(e) '(b c))
+           '([e #f]) '([b #f] [c #f]))
      (list (scope 41 99)
            (scope 28 126)
            '(40)
-           '() '(b c)))
+           '() '([b #f] [c #f])))
 
   (test-prog
    "#lang racket
@@ -290,10 +292,10 @@
    (list (scope 25 34)
          (scope 25 34)
          '(13 35)
-         '(abc) '()))
+         '([abc #f]) '()))
 
   ; Failure case: the mutated variable is moved, changing the semantics of the program.
-  #;
+  
   (test-prog
    "#lang racket
 
@@ -304,7 +306,7 @@
    (list (scope 29 39)
          (scope 29 39)
          '(13)
-         ))
+         '([a #t]) '()))
   )
 
 ;===============;
@@ -422,22 +424,39 @@
                ; min with module-scope as the whitespaces at the end of the module
                ; are considered out of scope otherwise.
                (unbound-ids module-stx from-scope to-pos))
-             ;; TODO: remove-duplicates is slow, also unbound-ids returns too many things?
-             (define in-ids  (remove-duplicates (map first in-unbounds)))
-             (define out-ids (remove-duplicates (map first out-unbounds)))
 
-             (define from-string (send ed get-text start end))
-             (define-values (call-site fun-site)
-               (make-call+fun-sites from-string fun-name in-ids out-ids))
+             (define mutated-ids (filter-map (λ (i) (and (second i) (first i))) in-unbounds))
+             (define ok-mutation?
+               (or (empty? mutated-ids)
+                   (eq? 'yes
+                        (message-box "Mutated variable"
+                                     (format "The following variables are mutated:
+~a
 
-             (send ed begin-edit-sequence)
-             (send ed delete start end)
-             (send ed insert call-site start)
-             (send ed tabify-selection start (+ start (string-length call-site)))
+This may result in incorrect code.
+
+Do you want to continue?"
+                                             (apply ~a mutated-ids #:separator " "))
+                                     fr
+                                     '(yes-no caution)))))
+             (when ok-mutation?
+             
+               ;; TODO: remove-duplicates is slow, also unbound-ids returns too many things?
+               (define in-ids  (map first in-unbounds))
+               (define out-ids (map first out-unbounds))
+
+               (define from-string (send ed get-text start end))
+               (define-values (call-site fun-site)
+                 (make-call+fun-sites from-string fun-name in-ids out-ids))
+
+               (send ed begin-edit-sequence)
+               (send ed delete start end)
+               (send ed insert call-site start)
+               (send ed tabify-selection start (+ start (string-length call-site)))
            
-             (define new-pos (send ed get-start-position))
-             (send ed insert fun-site)
-             (send ed tabify-selection new-pos (+ new-pos (string-length fun-site)))
-             (send ed end-edit-sequence)))]))
+               (define new-pos (send ed get-start-position))
+               (send ed insert fun-site)
+               (send ed tabify-selection new-pos (+ new-pos (string-length fun-site)))
+               (send ed end-edit-sequence))))]))
     #f))
 
