@@ -2,6 +2,7 @@
 @(require racket/runtime-path
          racket/dict
          racket/path
+         racket/match
          quickscript/base)
 
 @;TODO: How to have video links in script-help-string? Use scribble/manual too?
@@ -26,12 +27,9 @@ Some scripts for @(hyperlink "https://github.com/Metaxal/quickscript" "Quickscri
 
 @section{Installation}
 
-In DrRacket, in @code{File|Package manager|Source}, type @code{https://github.com/Metaxal/quickscript-extra.git},
-then register the new collection of scripts in Quickscript by evaluating
-@(racket (require quickscript-extra/register)) in DrRacket.
+In DrRacket, in @code{File|Package manager|Source}, type @code{https://github.com/Metaxal/quickscript-extra.git}.
 
-Or, on the command line, type: @codeblock{raco pkg install https://github.com/Metaxal/quickscript-extra.git} then register the new collection of scripts in Quickscript by evaluating
-@code{$ racket -l quickscript-extra/register}.
+Or, on the command line, type: @codeblock{raco pkg install quickscript-extra}.
 
 If DrRacket is already running, click on @code{Scripts|Manage scripts|Compile scripts and reload menu}.
 
@@ -40,7 +38,15 @@ If DrRacket is already running, click on @code{Scripts|Manage scripts|Compile sc
 
 @(itemlist
   (for/list ([(name str) (in-dict help-strings)])
-     (item @(bold name) ": " str)))
+     (item @(bold name) ": "
+           (let loop ([str str])
+             (match str
+               ;; link
+               [(regexp #px"^(.*)\\[([^]]+)\\]\\(([^)]+)\\)(.*)$" (list _ pre txt link post))
+                (list (loop pre)
+                      (hyperlink link txt)
+                      (loop post))]
+               [else str])))))
 
 
 @section{Uninstall}

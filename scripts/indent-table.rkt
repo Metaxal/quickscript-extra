@@ -4,7 +4,7 @@
          quickscript)
 
 (script-help-string "Indent rows on double-space-separated colums
-(video: https://www.youtube.com/watch?v=KJjVREsgnvA).")
+[video](https://www.youtube.com/watch?v=KJjVREsgnvA)")
 
 #|
 Laurent Orseau <laurent orseau gmail com> -- 2012-04-19

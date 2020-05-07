@@ -9,12 +9,11 @@
   (case (system-type 'os)
     [(unix)    "xdg-open"] ; or maybe mimeopen -n ?
     [(windows) "explorer"]
-    [(macosx)  "open"]
-    ))
+    [(macosx)  "open"]))
 
 (define-script open-file-directory
   #:label "Open file directory"
   #:menu-path ("&Utils")
-  (λ (str #:file f) 
+  (λ (str #:file f)
     (system (string-append cmd " \"" (path->string (path-only f)) "\""))
     #f))

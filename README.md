@@ -14,13 +14,15 @@ Or, on the command line, type:
 raco pkg install quickscript-extra
 ```
 
+.
+
 If DrRacket is already running, click on `Scripts|Manage
 scripts|Compile` `scripts` `and` `reload` `menu`.
 
 ## 2. Scripts
 
 * **abstract-variable**: Create a variable from the selected expression
-  \(video: https://www.youtube.com/watch?v=qgjAZd4eBBY\).
+  [video](https://www.youtube.com/watch?v=qgjAZd4eBBY)
 
 * **add-menu**: \(Example\) Shows how to dynamically add a menu to
   DrRacket.
@@ -44,26 +46,30 @@ scripts|Compile` `scripts` `and` `reload` `menu`.
   the current selected string in a message box.
 
 * **def-signatures**: Displays the signature of the procedure under the
-  cursor \(like DrRacket’s blue box but works also when the file does
-  not compile\).
+  cursor (like DrRacket’s blue box but works also when the file does not
+  compile).
 
 * **dynamic-abbrev**: Cyclic word completion using the words of the
   current file.
 
-* **enter-submod**: Easily enter a submodule \(main, test, drracket,
-  etc.\) in the interaction window.
+* **enter-submod**: Easily enter a submodule (main, test, drracket,
+  etc.) in the interaction window.
+
+* **extract-function**: Extracts a block of code out of its context and
+  generates a function and a call
+  [video](https://www.youtube.com/watch?v=XinMxDLZ7Zw)
 
 * **filepath-to-clipboard**: Write the path of the current file in the
   clipboard.
 
-* **git**: Some git commands \(linux only\). Currently meant as a demo.
+* **git**: Some git commands (linux only). Currently meant as a demo.
 
 * **goto-line**: Jump to a given line number in the current editor.
 
 * **gui-tools**: Code snippets for racket/gui widgets. Meant as a demo.
 
 * **indent-table**: Indent rows on double-space-separated colums
-  \(video: https://www.youtube.com/watch?v=KJjVREsgnvA\).
+  [video](https://www.youtube.com/watch?v=KJjVREsgnvA)
 
 * **insert-pict**: \(Example\) Insert a ‘pict‘ at the current position.
 
@@ -75,8 +81,8 @@ scripts|Compile` `scripts` `and` `reload` `menu`.
 
 * **open-dir**: Open the system’s file browser in the current directory.
 
-* **open-terminal**: Open a terminal in the current directory \(linux
-  only\).
+* **open-terminal**: Open a terminal in the current directory (linux
+  only).
 
 * **pasterack**: Opens Pasterack in the browser.
 
@@ -96,8 +102,7 @@ scripts|Compile` `scripts` `and` `reload` `menu`.
 
 * **sections**: Surrounds the selected text by comments ASCII frames.
 
-* **sort-lines**: Sorts the selected lines in \(anti-\)alphabetical
-  order.
+* **sort-lines**: Sorts the selected lines in (anti-)alphabetical order.
 
 * **surround-selection**: \(Example\) Surround the selected text with
   various characters.

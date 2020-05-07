@@ -3,7 +3,8 @@
          quickscript)
 
 (script-help-string
- "Create a variable from the selected expression (video: https://www.youtube.com/watch?v=qgjAZd4eBBY).")
+ "Create a variable from the selected expression
+[video](https://www.youtube.com/watch?v=qgjAZd4eBBY)")
 
 (define-script abstract-variable
   #:label "&Abstract variable"
