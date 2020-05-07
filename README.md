@@ -107,8 +107,11 @@ scripts and reload menu`.
 ## 3. Customizing
 
 If the default keybindings, names or submenus are not to you taste, they
-can be fully customize using Quickscript’s [shadow
+can be fully customized using Quickscript’s [shadow
 scripts](https://docs.racket-lang.org/quickscript/index.html?q=quickscripts#%28part._.Shadow_scripts%29).
+
+Scripts can also be deactivated altogether from the library \(`Scrits |
+Manage scripts | Library`).
 
 ## 4. Uninstall
 

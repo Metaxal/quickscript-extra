@@ -50,10 +50,12 @@ If DrRacket is already running, click on @tt{Scripts|Manage scripts|Compile scri
 
 @section{Customizing}
 
-If the default keybindings, names or submenus are not to you taste, they can be fully customize
+If the default keybindings, names or submenus are not to you taste, they can be fully customized
 using Quickscript's
 @hyperlink["https://docs.racket-lang.org/quickscript/index.html?q=quickscripts#%28part._.Shadow_scripts%29"]{shadow scripts}.
 
+Scripts can also be deactivated altogether from the library
+(@tt{Scrits | Manage scripts | Library}).
 
 @section{Uninstall}
 
