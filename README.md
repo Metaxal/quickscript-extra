@@ -104,7 +104,13 @@ scripts and reload menu`.
 * **tweet**: \(Example\) Tweet the current selection. See the script
   file for configuration details.
 
-## 3. Uninstall
+## 3. Customizing
+
+If the default keybindings, names or submenus are not to you taste, they
+can be fully customize using Quickscript’s [shadow
+scripts](https://docs.racket-lang.org/quickscript/index.html?q=quickscripts#%28part._.Shadow_scripts%29).
+
+## 4. Uninstall
 
 Before removing the package, first evaluate `(require
 quickscript-extra/unregister)`, or on the command line with `$ racket -l
