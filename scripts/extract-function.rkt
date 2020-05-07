@@ -212,44 +212,48 @@
 |#
 
 (module+ test
-  (let ()
-    ;; Tricky case due to module not spanning the whole string
-    (define txt
-      "#lang racket
+  (define test-prog
+    (match-lambda*
+      [(list txt
+             (list from-scopes common-from-scopes
+                   dest-posss
+                   expected-inss expected-outss)
+             ...)
+       (define stx (module-string->syntax txt))
+       (define sym+scopes (id-scopes stx))
+       (define d (syntax->source-scope-dict stx))
+       (let ([scopes-from-syncheck (map second sym+scopes)])
+         (for ([(k v) (in-dict d)])
+           (check member k scopes-from-syncheck)
+           (check member v scopes-from-syncheck))
+         (for ([from-scope         (in-list from-scopes)]
+               [common-from-scope  (in-list common-from-scopes)]
+               [expected-ins       (in-list expected-inss)]
+               [expected-outs      (in-list expected-outss)]
+               [dest-poss          (in-list dest-posss)])
+           (define info1
+             (format "from-scope: ~a common-from-scope:~a"
+                     from-scope
+                     common-from-scope))
+           (when common-from-scope
+             (check-equal? (smallest-common-scope stx from-scope)
+                           common-from-scope
+                           info1))
+           (for ([dest-pos (in-list dest-poss)])
+             (define-values (in-ids out-ids)
+               (unbound-ids stx from-scope dest-pos))
+             (define info2
+               (format "~a dest-pos: ~a" info1 dest-pos))
+             (check-equal? (remove-duplicates (map first in-ids))
+                           expected-ins
+                           info2)
+             (check-equal? (remove-duplicates (map first out-ids))
+                           expected-outs
+                           info2))))]))
 
-(λ (abc)
-  (+ abc 3))
-
-
-
-")
-    (define stx (module-string->syntax txt))
-    (define sym+scopes (id-scopes stx))
-    (define d (syntax->source-scope-dict stx))
-    (let ([scopes-from-syncheck (map second sym+scopes)])
-      (for ([(k v) (in-dict d)])
-        (check member k scopes-from-syncheck)
-        (check member v scopes-from-syncheck)))
-    ; (+ abc 3)@
-    (define from-scope (scope 25 34))
-    (check-equal? (smallest-common-scope stx from-scope)
-                  from-scope)
-    (for ([dest-pos (in-list '(13 35))])
-      (check-equal? (smallest-common-scope stx dest-pos)
-                    (scope 6 +inf.0))
-      (define-values (in-ids out-ids)
-        (unbound-ids stx from-scope dest-pos)) 
-      (check-equal? (remove-duplicates (map first in-ids))
-                    '(abc))
-      (check-equal? (remove-duplicates (map first out-ids))
-                    '())))
-
-  )
-
-(module+ test
-  (let ()
-    (define txt
-      "#lang racket
+  
+  (test-prog
+     "#lang racket
 
 (define a 1)
 
@@ -260,44 +264,47 @@
   (define d 4)
   (+ b c d))
 
-")
-    (define stx (module-string->syntax txt))
-    (define sym+scopes (id-scopes stx))
-    (define d (syntax->source-scope-dict stx))
-    (let ([scopes-from-syncheck (map second sym+scopes)])
-      (for ([(k v) (in-dict d)])
-        (check member k scopes-from-syncheck)
-        (check member v scopes-from-syncheck)))
-    (define from-scope (scope 41 99))
-    (check-equal? (smallest-common-scope stx from-scope)
-                  (scope 28 126))
-    (for ([dest-pos (in-list '(13 26 28 126 128))])
-      (if (= dest-pos 28)
-        (check-equal? (smallest-common-scope stx dest-pos)
-                      (scope 28 126)
-                      (~a dest-pos))
-        (check-equal? (smallest-common-scope stx dest-pos)
-                      (scope 6 +inf.0)
-                      (~a dest-pos)))
-      (define expected-ins '(e))
-      (define expected-outs '(b c))
-      (define-values (in-ids out-ids)
-        (unbound-ids stx from-scope dest-pos)) 
-      (check-equal? (remove-duplicates (map first in-ids))
-                    expected-ins
-                    (~a dest-pos))
-      (check-equal? (remove-duplicates (map first out-ids))
-                    expected-outs
-                    (~a dest-pos)))
-    (for ([dest-pos (in-list '(40))])
-      (define-values (in-ids out-ids)
-        (unbound-ids stx from-scope dest-pos)) 
-      (check-equal? (remove-duplicates (map first in-ids))
-                    '()
-                    (~a dest-pos))
-      (check-equal? (remove-duplicates (map first out-ids))
-                    '(b c)
-                    (~a dest-pos))))
+"
+     (list (scope 41 99) ; from-scope
+           (scope 28 126) ; common-from-scope
+           '(13 26 126 128) ; dest-pos
+           '(e) '(b c)) ; expected-ins expected-outs
+     (list (scope 41 99)
+           (scope 28 126)
+           '(28)
+           '(e) '(b c))
+     (list (scope 41 99)
+           (scope 28 126)
+           '(40)
+           '() '(b c)))
+
+  (test-prog
+   "#lang racket
+
+(λ (abc)
+  (+ abc 3))
+
+
+
+"
+   (list (scope 25 34)
+         (scope 25 34)
+         '(13 35)
+         '(abc) '()))
+
+  ; Failure case: the mutated variable is moved, changing the semantics of the program.
+  #;
+  (test-prog
+   "#lang racket
+
+(let ([a 4])
+  (set! a 2)
+  a)
+"
+   (list (scope 29 39)
+         (scope 29 39)
+         '(13)
+         ))
   )
 
 ;===============;
