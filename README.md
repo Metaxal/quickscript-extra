@@ -5,19 +5,13 @@ which must be installed first.
 
 ## 1. Installation
 
-In DrRacket, in `File|Package manager|Source`, type
-`https://github.com/Metaxal/quickscript-extra.git`.
+In DrRacket, in `File|Package manager|Source`, enter
+`quickscript-extra`.
 
-Or, on the command line, type:
+Or, on the command line, type: `raco pkg install quickscript-extra`.
 
-```racket
-raco pkg install quickscript-extra
-```
-
-.
-
-If DrRacket is already running, click on `Scripts|Manage
-scripts|Compile` `scripts` `and` `reload` `menu`.
+If DrRacket is already running, click on `Scripts|Manage scripts|Compile
+scripts and reload menu`.
 
 ## 2. Scripts
 
@@ -113,8 +107,8 @@ scripts|Compile` `scripts` `and` `reload` `menu`.
 ## 3. Uninstall
 
 Before removing the package, first evaluate `(require
-quickscript-extra/unregister)`, or on the command line with
-`$` `racket` `-l` `quickscript-extra/unregister`.
+quickscript-extra/unregister)`, or on the command line with `$ racket -l
+quickscript-extra/unregister`.
 
 Then remove the package, either from DrRacket’s `File` menu, or on the
-command line with `$` `raco` `pkg` `remove` `quickscript-extra`.
+command line with `$ raco pkg remove quickscript-extra`.

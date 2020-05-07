@@ -27,11 +27,11 @@ Some scripts for @(hyperlink "https://github.com/Metaxal/quickscript" "Quickscri
 
 @section{Installation}
 
-In DrRacket, in @code{File|Package manager|Source}, type @code{https://github.com/Metaxal/quickscript-extra.git}.
+In DrRacket, in @tt{File|Package manager|Source}, enter @tt{quickscript-extra}.
 
-Or, on the command line, type: @codeblock{raco pkg install quickscript-extra}.
+Or, on the command line, type: @tt{raco pkg install quickscript-extra}.
 
-If DrRacket is already running, click on @code{Scripts|Manage scripts|Compile scripts and reload menu}.
+If DrRacket is already running, click on @tt{Scripts|Manage scripts|Compile scripts and reload menu}.
 
 @section{Scripts}
 
@@ -52,7 +52,7 @@ If DrRacket is already running, click on @code{Scripts|Manage scripts|Compile sc
 @section{Uninstall}
 
 Before removing the package, first evaluate @(racket (require quickscript-extra/unregister)), 
-or on the command line with @code{$ racket -l quickscript-extra/unregister}.
+or on the command line with @tt{$ racket -l quickscript-extra/unregister}.
 
 Then remove the package, either from DrRacket's @code{File} menu, or on the command line with
-@code{$ raco pkg remove quickscript-extra}.
+@tt["$ raco pkg remove quickscript-extra"].
