@@ -10,12 +10,24 @@
  "Extracts a block of code out of its context and generates a function and a call
  [video](https://www.youtube.com/watch?v=XinMxDLZ7Zw)")
 
-;;; How to use:
-;;; . Select a block of code
-;;; . Click on Scripts | extract-function (Ctrl-Shift-X)
-;;; . Enter a function name
-;;; . Move the cursor to the insertion point (don't edit the file!)
-;;; . Click on Scripts | put-function (Ctrl-Shift-Y)
+;;;; How to use:
+;;;; . Select a block of code
+;;;; . Click on Scripts | extract-function (Ctrl-Shift-X)
+;;;; . Enter a function name
+;;;; . Move the cursor to the insertion point (don't edit the file!)
+;;;; . Click on Scripts | put-function (Ctrl-Shift-Y)
+
+;;;; Some caveats:
+;;;; . Don't trust this script too much, obviously!
+;;;; . True lexical scoping via check-syntax is used for the original code,
+;;;;   but only estimated for the code after transformation. An identifier is
+;;;;   assumed to be in-scope if it is within the smallest-common-scope of
+;;;;   its definition.
+;;;;   . This means that some identifiers may be considered out-of-scope when
+;;;;     they are not.
+;;;; . Mutated variables can lead to inconsistent results, hence a warning
+;;;;   message is displayed for such cases.
+;;;; . Currently the call site isn't checked to be in scope of the definition site.
 
 
 ;=================================;
