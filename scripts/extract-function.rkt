@@ -17,12 +17,15 @@
 ;;;; . Move the cursor to the insertion point (don't edit the file!)
 ;;;; . Click on Scripts | put-function (Ctrl-Shift-Y)
 
+;;;; This scripts aims at transforming the code while retaining its semantics, but
+;;;; this is not perfect.
 ;;;; Some caveats:
-;;;; . Don't trust this script too much, obviously!
+;;;; . Don't trust this script too much, obviously. Check that the resulting code
+;;;;   suits you.
 ;;;; . If check-syntax doesn't have all the information, the resulting code
 ;;;;   may not be semanticaly equivalent to the original.
 ;;;; . True lexical scoping via check-syntax is used for the original code,
-;;;;   but only estimated for the code after transformation. An identifier is
+;;;;   but only estimated for the code after transformation: An identifier is
 ;;;;   assumed to be in-scope if it is within the smallest common sexp of
 ;;;;   its definition (see `smallest-common-scope`).
 ;;;;   . This means that some identifiers may be considered out-of-scope when
