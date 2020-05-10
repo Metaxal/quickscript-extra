@@ -19,10 +19,12 @@
 
 ;;;; Some caveats:
 ;;;; . Don't trust this script too much, obviously!
+;;;; . If check-syntax doesn't have all the information, the resulting code
+;;;;   may not be semanticaly equivalent to the original.
 ;;;; . True lexical scoping via check-syntax is used for the original code,
 ;;;;   but only estimated for the code after transformation. An identifier is
-;;;;   assumed to be in-scope if it is within the smallest-common-scope of
-;;;;   its definition.
+;;;;   assumed to be in-scope if it is within the smallest common sexp of
+;;;;   its definition (see `smallest-common-scope`).
 ;;;;   . This means that some identifiers may be considered out-of-scope when
 ;;;;     they are not.
 ;;;; . Mutated variables can lead to inconsistent results, hence a warning
@@ -83,28 +85,38 @@
            (set! sym+scopes (cons (list x sc) sym+scopes))])) ; else nothing
   (reverse sym+scopes))
 
-
 ;; Returns a dict of scope -> source-scope
-;; The only function that uses check-syntax (show-content)
-(define (syntax->source+mutation-dicts mod-stx)
-  (define hsource (make-hash))
-  (define hmutation (make-hash))
-  (for ([v (in-list (show-content mod-stx))])
-    (match v
-      [(vector 'syncheck:add-arrow/name-dup/pxpy
-               start-left start-right start-px start-py
-               end-left   end-right   end-px   end-py
-               actual?
-               phase-level
-               require-arrow
-               name-dup?)
-       (define start-scope (scope start-left start-right))
-       (hash-set! hsource start-scope start-scope)
-       (hash-set! hsource (scope end-left end-right) start-scope)]
-      [(vector 'syncheck:add-mouse-over-status start end "mutated variable")
-       (hash-set! hmutation (scope start end) #t)]
-      [else (void)]))
-  (values hsource hmutation))
+;; The only function that uses check-syntax (show-content).
+;; We keep the last results to avoid recomputing them, but we don't use a memo hash to avoid
+;; linear increase of memory.
+;; TODO: implement annotation-mixin instead of calling show-content.
+(define syntax->source+mutation-dicts
+  (let ([source-dict   #f]
+        [mutation-dict #f]
+        [module-stx    #f])
+    (λ (mod-stx)
+      (unless (eq? module-stx mod-stx)
+        (define hsource (make-hash))
+        (define hmutation (make-hash))
+        (for ([v (in-list (show-content mod-stx))])
+          (match v
+            [(vector 'syncheck:add-arrow/name-dup/pxpy
+                     start-left start-right start-px start-py
+                     end-left   end-right   end-px   end-py
+                     actual?
+                     phase-level
+                     require-arrow
+                     name-dup?)
+             (define start-scope (scope start-left start-right))
+             (hash-set! hsource start-scope start-scope)
+             (hash-set! hsource (scope end-left end-right) start-scope)]
+            [(vector 'syncheck:add-mouse-over-status start end "mutated variable")
+             (hash-set! hmutation (scope start end) #t)]
+            [else (void)]))
+        (set! source-dict hsource)
+        (set! mutation-dict hmutation)
+        (set! module-stx mod-stx))
+      (values source-dict mutation-dict))))
 
 ;; Returns two lists:
 ;; The list of ids that are bound in from-scope but won't be bound in dest-pos,
@@ -365,25 +377,59 @@
 (define start #f)
 (define end #f)
 (define fun-name #f)
-(define txt-length #f)
+(define txt-length #f) ; Can we use a string-hash instead?
+(define module-stx #f)
+(define fil #f)
+(define check-syntax-thread #f)
+
+(define (start-cs-thread fil fr txt)
+  (set! module-stx #f)
+  (set! check-syntax-thread
+        (thread
+         (λ ()
+           ;; Setting the current-directory to that of f;
+           ;; ensures that read-syntax and syncheck have access to
+           ;; local requires.
+           (parameterize ([current-directory (if fil
+                                               (path-only fil)
+                                               (current-directory))])
+             (define mod-stx
+               (with-handlers ([exn:fail:read?
+                                (λ (e)
+                                  (string-append "Syntax error while reading file: "
+                                                 (exn-message e)))])
+                 (module-string->syntax txt fil)))
+             ; Trigger show-content, which is what takes the most time.
+             (syntax->source+mutation-dicts mod-stx)
+             ; When module-stx is set, we are ready.
+             (set! module-stx mod-stx))))))
+
 
 (define-script extract-function
   #:label "extract-function"
   #:shortcut #\x
   #:shortcut-prefix (ctl shift)
   #:persistent
-  (λ (selection #:editor ed #:frame fr)
+  (λ (selection #:file f #:editor ed #:frame fr)
+    ; Start check-syntax early to be (more) ready on put-function
+    (define txt (send ed get-text))
+    (start-cs-thread f fr txt)
     (define name (get-text-from-user "Function name"
                                      "Choose a name for the new function"
                                      fr
                                      "FOO"
                                      '(disallow-invalid)
                                      #:validate (λ (s) (not (regexp-match #px"\\s|^#|\"|'" s)))))
-    (when name
-      (set! fun-name name)
-      (set! start (send ed get-start-position))
-      (set! end (send ed get-end-position))
-      (set! txt-length (string-length (send ed get-text))))
+    (cond
+      [name
+       (set! fun-name name)
+       (set! start (send ed get-start-position))
+       (set! end (send ed get-end-position))
+       (set! fil f)
+       (set! txt-length (string-length txt))]
+      [else
+       (kill-thread check-syntax-thread)
+       (set! check-syntax-thread #f)])
     #f))
 
 (define-script put-function
@@ -392,12 +438,30 @@
   #:shortcut-prefix (ctl shift)
   #:persistent
   (λ (selection #:file f #:editor ed #:frame fr)
-    (when start
+    ;; If module-stx, then the thread is irrelevant.
+    ;; If not, then wait for the thread to produce module-stx.
+    (when (or module-stx
+              check-syntax-thread)
+      (unless module-stx
+        (thread-wait check-syntax-thread))
+      (set! check-syntax-thread #f)
       (define txt (send ed get-text))
       (cond
+        [(not (equal? fil f))
+         (message-box "extract-function: File error"
+                      "Cannot extract function to a different file"
+                      fr '(ok stop))]
         [(not (= (string-length txt) txt-length))
-         (message-box "Error"
+         (message-box "extract-function: Buffer error"
                       "Buffer has changed since extract-function"
+                      fr '(ok stop))]
+        [(string? module-stx)
+         (message-box "extract-function: Check-syntax error"
+                      module-stx
+                      fr '(ok stop))]
+        [(not (syntax? module-stx))
+         (message-box "extract-function: Error"
+                      (format "Not syntax: ~a" module-stx)
                       fr '(ok stop))]
         [else
          ;; Setting the current-directory to that of f
@@ -405,70 +469,56 @@
          ;; local requires.
          (parameterize ([current-directory (if f
                                              (path-only f)
-                                             (current-directory))])
-    
-           (define module-stx
-             (with-handlers ([exn:fail:read?
-                              (λ (e)
-                                (message-box "Error"
-                                             (string-append "Syntax error while reading file: "
-                                                            (exn-message e))
-                                             fr '(ok stop))
-                                #f)])
-               (module-string->syntax txt f)))
-      
-           (when module-stx
+                                             (current-directory))])    
 
-             (define module-scope (syntax-scope module-stx))
-        
-             (define to-pos (send ed get-start-position))
+           (define to-pos (send ed get-start-position))
 
-             ;; TODO: Prevent moving to a place where the definition is unreachable
-             ;; from the call site.
-             ;; We could check that the smallest enclosing scope of to-pos
-             ;; also contains from-scope.
-             ;; May fail with `begin`, but better to prevent some legal cases than
-             ;; allow illegal ones? Or give a warning and the option?
+           ;; TODO: Prevent moving to a place where the definition is unreachable
+           ;; from the call site.
+           ;; We could check that the smallest enclosing scope of to-pos
+           ;; also contains from-scope.
+           ;; May fail with `begin`, but better to prevent some legal cases than
+           ;; allow illegal ones? Or give a warning and the option?
 
-             (define from-scope (scope start end))
+           (define from-scope (scope start end))
 
-             (define-values (in-unbounds out-unbounds)
-               ; min with module-scope as the whitespaces at the end of the module
-               ; are considered out of scope otherwise.
-               (unbound-ids module-stx from-scope to-pos))
+           (define-values (in-unbounds out-unbounds)
+             ; min with module-scope as the whitespaces at the end of the module
+             ; are considered out of scope otherwise.
+             (unbound-ids module-stx from-scope to-pos))
 
-             (define mutated-ids (filter-map (λ (i) (and (second i) (first i))) in-unbounds))
-             (define ok-mutation?
-               (or (empty? mutated-ids)
-                   (eq? 'yes
-                        (message-box "Mutated variable"
-                                     (format "The following variables are mutated:
+           (define mutated-ids (filter-map (λ (i) (and (second i) (first i))) in-unbounds))
+           (define ok-mutation?
+             (or (empty? mutated-ids)
+                 (eq? 'yes
+                      (message-box "Mutated variable"
+                                   (format "The following variables are mutated:
 ~a
 
 This may result in incorrect code.
 
 Do you want to continue?"
-                                             (apply ~a mutated-ids #:separator " "))
-                                     fr
-                                     '(yes-no caution)))))
-             (when ok-mutation?
+                                           (apply ~a mutated-ids #:separator "\n"))
+                                   fr
+                                   '(yes-no caution)))))
+           (when ok-mutation?
              
-               ;; TODO: remove-duplicates is slow, also unbound-ids returns too many things?
-               (define in-ids  (map first in-unbounds))
-               (define out-ids (map first out-unbounds))
+             ;; TODO: remove-duplicates is slow, also unbound-ids returns too many things?
+             (define in-ids  (map first in-unbounds))
+             (define out-ids (map first out-unbounds))
 
-               (define from-string (send ed get-text start end))
-               (define-values (call-site fun-site)
-                 (make-call+fun-sites from-string fun-name in-ids out-ids))
+             (define from-string (send ed get-text start end))
+             (define-values (call-site fun-site)
+               (make-call+fun-sites from-string fun-name in-ids out-ids))
 
-               (send ed begin-edit-sequence)
-               (send ed delete start end)
-               (send ed insert call-site start)
-               (send ed tabify-selection start (+ start (string-length call-site)))
+             (send ed begin-edit-sequence)
+             (send ed delete start end)
+             (send ed insert call-site start)
+             (send ed tabify-selection start (+ start (string-length call-site)))
            
-               (define new-pos (send ed get-start-position))
-               (send ed insert fun-site)
-               (send ed tabify-selection new-pos (+ new-pos (string-length fun-site)))
-               (send ed end-edit-sequence))))]))
+             (define new-pos (send ed get-start-position))
+             (send ed insert fun-site)
+             (send ed tabify-selection new-pos (+ new-pos (string-length fun-site)))
+             (send ed end-edit-sequence)))]))
     #f))
 
