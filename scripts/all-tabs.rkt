@@ -7,6 +7,9 @@
 ;;; This script displays all tabs, which is particularly convenient when
 ;;; there are many tabs and not all of them are visible.
 
+(script-help-string
+ "Have a menu that displays all open tabs in DrRacket.")
+
 (define-script all-tabs
   #:label "All tabs"
   (λ (str #:frame fr)  
