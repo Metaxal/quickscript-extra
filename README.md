@@ -21,8 +21,6 @@ scripts and reload menu`.
 * **add-menu**: \(Example\) Shows how to dynamically add a menu to
   DrRacket.
 
-* **All tabs**: Have a Menu that displays all open tabs in DrRacket.
-
 * **author-date**: Insert text snippets with author, date, time, and
   licence.
 
