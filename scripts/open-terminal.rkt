@@ -6,7 +6,7 @@
 (script-help-string "Open a terminal in the current directory.")
 
 (define-script open-terminal
-  #:label "Open terminal"
+  #:label "Open terminal here"
   #:menu-path ("&Utils")
   #:os-types (unix macosx)
   #:output-to message-box
