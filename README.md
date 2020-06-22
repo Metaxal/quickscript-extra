@@ -77,8 +77,7 @@ scripts and reload menu`.
 
 * **open-dir**: Open the system’s file browser in the current directory.
 
-* **open-terminal**: Open a terminal in the current directory (linux and
-  macosx only).
+* **open-terminal**: Open a terminal in the current directory.
 
 * **pasterack**: Opens Pasterack in the browser.
 
