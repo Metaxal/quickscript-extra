@@ -3,7 +3,7 @@
          racket/path
          quickscript)
 
-(script-help-string "Open a terminal in the current directory.")
+(script-help-string "Open a terminal in the current directory (linux and macosx only).")
 
 (define-script open-terminal
   #:label "Open terminal here"
