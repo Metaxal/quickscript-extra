@@ -10,22 +10,21 @@
   #:menu-path ("&Utils")
   #:os-types (unix macosx)
   #:output-to message-box
-  
-  (cond
 
-    [(equal? (system-type 'os) 'unix)
-     (λ (str #:file f)  
-       (define dir (path->string (path-only f)))
-       (system (string-append "gnome-terminal"
-                              " --working-directory=\"" dir "\""
-                              " -t \"" dir "\""
-                              "&"))
-       #f)]
-    [(equal? (system-type 'os) 'macosx)
-     (λ (str #:file f)  
-       (define dir (path->string (path-only f)))
-       (define osascriptdir (string-append
-                             (path->string (find-system-path 'pref-dir))
-                             "quickscript/user-scripts/"))
-       (system (string-append "osascript -e 'tell app \"Terminal\" to do script \"cd \\\"" dir "\\\"\"'" ))
-       #f)]))
+  (case (system-type 'os)
+    [(unix) (λ (str #:file f)  
+              (define dir (path->string (path-only f)))
+              (system (string-append "gnome-terminal"
+                                     " --working-directory=\"" dir "\""
+                                     " -t \"" dir "\""
+                                     "&"))
+              #f)]
+    [(macosx) (λ (str #:file f)  
+                (define dir (path->string (path-only f)))
+                (define osascriptdir (string-append
+                                      (path->string (find-system-path 'pref-dir))
+                                      "quickscript/user-scripts/"))
+                (system (string-append "osascript -e 'tell app \"Terminal\" to do script \"cd \\\"" dir "\\\"\"'" ))
+                #f)]
+    ;[(windows) (system (string-append "cmd /c start cmd.exe /K \"cd " dir))]
+    ))
