@@ -29,5 +29,4 @@
     [(windows)
      (λ (str #:file f)
        (define dir (path->string (path-only f)))
-       (system (string-append "cmd /c start cmd.exe /K \"cd " dir)))]
        (shell-execute #f "cmd.exe" "" dir 'sw_shownormal))]))
