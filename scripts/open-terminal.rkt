@@ -8,7 +8,7 @@
 (define-script open-terminal
   #:label "Open terminal here"
   #:menu-path ("&Utils")
-  #:os-types (unix macos windows)
+  #:os-types (unix macosx windows)
   #:output-to message-box
 
   (case (system-type 'os)
