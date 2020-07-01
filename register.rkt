@@ -6,6 +6,5 @@
 ;; This is going to be called during setup and will automatically
 ;; register quickscript-extra in quickscript's library.
 (begin-for-syntax
-  ;; To be displayed after setup
   (define-runtime-path script-dir "scripts")
   (add-third-party-script-directory! script-dir))
