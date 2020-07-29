@@ -3,7 +3,7 @@
          racket/gui/base
          quickscript)
 
-(script-help-string "Indent rows on double-space-separated colums
+(script-help-string "Indent rows on double-space-separated columns
 [video](https://www.youtube.com/watch?v=KJjVREsgnvA)")
 
 #|
