@@ -1,7 +1,6 @@
 # Quickscript Extra
 
-Some scripts for [Quickscript](https://github.com/Metaxal/quickscript),
-which must be installed first.
+Some scripts for [Quickscript](https://github.com/Metaxal/quickscript).
 
 ## 1. Installation
 
@@ -64,7 +63,7 @@ scripts and reload menu`.
 
 * **gui-tools**: Code snippets for racket/gui widgets. Meant as a demo.
 
-* **indent-table**: Indent rows on double-space-separated colums
+* **indent-table**: Indent rows on double-space-separated columns
   [video](https://www.youtube.com/watch?v=KJjVREsgnvA)
 
 * **insert-pict**: \(Example\) Insert a ‘pict‘ at the current position.
@@ -111,14 +110,5 @@ If the default keybindings, names or submenus are not to you taste, they
 can be fully customized using Quickscript’s [shadow
 scripts](https://docs.racket-lang.org/quickscript/index.html?q=quickscripts#%28part._.Shadow_scripts%29).
 
-Scripts can also be deactivated altogether from the library \(`Scrits |
-Manage scripts | Library`).
-
-## 4. Uninstall
-
-Before removing the package, first evaluate `(require
-quickscript-extra/unregister)`, or on the command line with `$ racket -l
-quickscript-extra/unregister`.
-
-Then remove the package, either from DrRacket’s `File` menu, or on the
-command line with `$ raco pkg remove quickscript-extra`.
+Scripts can also be deactivated altogether from the library
+\(`Scripts|Manage scripts|Library`).

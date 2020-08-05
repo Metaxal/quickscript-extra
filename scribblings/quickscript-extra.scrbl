@@ -5,8 +5,6 @@
           racket/match
           quickscript/base)
 
-@;TODO: How to have video links in script-help-string? Use scribble/manual too?
-
 @(define-runtime-path scripts-path "../scripts")
 
 @;; If calling this function is slow, compile the scripts first.
@@ -23,7 +21,7 @@
 
 @title{Quickscript Extra}
 
-Some scripts for @(hyperlink "https://github.com/Metaxal/quickscript" "Quickscript"), which must be installed first.
+Some scripts for @(hyperlink "https://github.com/Metaxal/quickscript" "Quickscript").
 
 @section{Installation}
 
