@@ -35,6 +35,11 @@
 ;;;; . Currently the call site isn't checked to be in scope of the definition site.
 
 
+;;; TODO: use `free-vars`:
+;;; https://docs.racket-lang.org/syntax/syntax-helpers.html?q=free-vars#%28mod-path._syntax%2Ffree-vars%29
+;;; This way we may avoid using check-syntax altogether!
+
+
 ;=================================;
 ;=== Function extraction tools ===;
 ;=================================;
@@ -410,6 +415,7 @@
 
 (define-script extract-function
   #:label "extract-function"
+  #:menu-path ("Re&factor")
   #:shortcut #\x
   #:shortcut-prefix (ctl shift)
   #:persistent
@@ -436,7 +442,8 @@
     #f))
 
 (define-script put-function
-  #:label"put-function"
+  #:label "put-function"
+  #:menu-path ("Re&factor")
   #:shortcut #\y
   #:shortcut-prefix (ctl shift)
   #:persistent

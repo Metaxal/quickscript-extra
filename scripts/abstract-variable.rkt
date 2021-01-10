@@ -8,7 +8,7 @@
 
 (define-script abstract-variable
   #:label "&Abstract variable"
-  #:menu-path ("Sele&ction")
+  #:menu-path ("Re&factor")
   (λ (str) 
     (cond
       [(string=? str "")
