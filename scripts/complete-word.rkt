@@ -4,7 +4,7 @@
          racket/list
          quickscript)
 
-(script-help-string "Word completion from a give user dictionary")
+(script-help-string "Word completion from a given user dictionary")
 ;;; Replaces the text abbreviation right before the caret by some expanded text
 
 (define words
