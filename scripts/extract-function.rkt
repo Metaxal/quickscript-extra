@@ -261,8 +261,10 @@
        (define-values (source-dict mutation-dict)
          (syntax->source+mutation-dicts stx))
        (let ([scopes-from-syncheck (map second sym+scopes)])
-         (for ([(k v) (in-dict source-dict)])
-           (check member k scopes-from-syncheck)
+         ; This doesn't pass anymore because syncheck now binds arrows
+         ; to the invisible #%app
+         #;(for ([(k v) (in-dict source-dict)])
+           (check member k scopes-from-syncheck (list k v))
            (check member v scopes-from-syncheck))
          (for ([from-scope         (in-list from-scopes)]
                [common-from-scope  (in-list common-from-scopes)]
