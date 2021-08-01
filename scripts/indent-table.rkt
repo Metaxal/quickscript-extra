@@ -3,6 +3,8 @@
          racket/gui/base
          quickscript)
 
+(provide indent-table*)
+
 (script-help-string "Indent rows on double-space-separated columns
 [video](https://www.youtube.com/watch?v=KJjVREsgnvA)")
 
@@ -42,6 +44,42 @@ empty columns are added at the end of the shortest rows.
   (define px-splitter
     (pregexp (string-append " *" (regexp-quote sep) " *")))
   ; split in columns, after removing all leading and trailing spaces:
+  ; lens are the maximum lengths of the columns
+  (define-values (llines2 lens)
+    (for/fold ([llines2 '()]
+               [rev-lens '()]
+               #:result (values (reverse llines2) rev-lens))
+              ([l (in-list lines)])
+      (define items (regexp-split px-splitter (string-trim l)))
+      ; Re-prepend the leading spaces to the first item to preserve indentation.
+      ; items cannot be empty.
+      (if (and (string=? "" (first items))
+               (empty? (rest items)))
+        (values (cons '() llines2) rev-lens)
+        (let ([items (cons (string-append (first (regexp-match #px"^ *" l)) (first items))
+                           (rest items))])
+      
+          (define diff-n-items (- (length items) (length rev-lens)))
+          (define new-rev-lens
+            (map max
+                 (append (make-list (max 0 diff-n-items) 0)
+                         rev-lens)
+                 (append (make-list (max 0 (- diff-n-items)) 0)
+                         (map string-length items))))
+          (values (cons items llines2)
+                  new-rev-lens)))))
+
+  (string-join
+   (for/list ([items (in-list llines2)])
+     (string-join
+      (for/list ([item (in-list items)]
+                 [len (in-list lens)])
+       (string-pad-right item len))
+      new-sep))
+   "\n")
+  
+  #;(begin
+  
   (define llines2 
     (for/list ([l lines])
       (regexp-split px-splitter (string-trim l))))
@@ -53,7 +91,7 @@ empty columns are added at the end of the shortest rows.
   ; re-prepend the leading spaces to preserve indentation:
   (define llines
     (map (λ (ll l) (cons (string-append (first (regexp-match #px"^ *" l)) (first ll))
-                       (rest ll)))
+                         (rest ll)))
          llines3 lines))
   ;(pretty-write llines)
   ; pad each item in each column to the length of the longest item in the column:
@@ -69,7 +107,7 @@ empty columns are added at the end of the shortest rows.
   (define str-new
     (string-join indented-lines "\n"))
   ; return value:
-  str-new
+  str-new)
   )
 
 (define-script indent-table
@@ -94,6 +132,7 @@ empty columns are added at the end of the shortest rows.
     "
     a  b  c    
    aa    bb  cc  dd  ee
+
  aaaa  bbb    ccccc  dddd
     x             y  z  
 ")
@@ -116,5 +155,32 @@ empty columns are added at the end of the shortest rows.
   (displayln table1b)
   (newline)
   (displayln (indent-table* table1b #:sep "&" #:new-sep "|"))
+  )
+
+(module+ test
+  (require rackunit)
+  (define from
+    "\
+  (define immutable-string (string->immutable-string string))
+  (define start (string-replacement-start replacement))
+  (define end (string-replacement-original-end replacement))
+  (define new-end (string-replacement-new-end replacement))
+  (define contents (string-replacement-contents replacement))
+  (define required-length (string-replacement-required-length replacement))
+  (define original-length (string-length immutable-string))
+")
+  (define to
+    "\
+  (define immutable-string (string->immutable-string string)) 
+  (define start            (string-replacement-start           replacement))                                                   
+  (define end              (string-replacement-original-end    replacement))                                                   
+  (define new-end          (string-replacement-new-end         replacement))                                                   
+  (define contents         (string-replacement-contents        replacement))                                                   
+  (define required-length  (string-replacement-required-length replacement))                                                   
+  (define original-length  (string-length immutable-string))  
+")
+  (define str2 (indent-table* from #:sep " ("))
+  (define str3 (indent-table* str2 #:sep " rep"))
+  (check-equal? str3 to)
   )
 
