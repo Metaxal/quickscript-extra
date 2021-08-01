@@ -76,39 +76,7 @@ empty columns are added at the end of the shortest rows.
                  [len (in-list lens)])
        (string-pad-right item len))
       new-sep))
-   "\n")
-  
-  #;(begin
-  
-  (define llines2 
-    (for/list ([l lines])
-      (regexp-split px-splitter (string-trim l))))
-  ; pad too short lists with empty columns:
-  (define llines3
-    (let ([lmax (apply max (map length llines2))])
-      (map (λ (ll) (append ll (build-list (- lmax (length ll)) (λ _ ""))))
-           llines2)))
-  ; re-prepend the leading spaces to preserve indentation:
-  (define llines
-    (map (λ (ll l) (cons (string-append (first (regexp-match #px"^ *" l)) (first ll))
-                         (rest ll)))
-         llines3 lines))
-  ;(pretty-write llines)
-  ; pad each item in each column to the length of the longest item in the column:
-  (define lcols (apply map (λ items (let ([lmax (apply max (map string-length items))])
-                                      (map (λ (s) (string-pad-right s lmax)) items)))
-                       llines))
-  ;(pretty-write lcols)
-  ; make the string for each line, and remove trailing spaces (last column has also been resized):
-  (define indented-lines 
-    (apply map (λ items (string-trim (string-join items new-sep) #:left? #f))
-           lcols))
-  ; append all the lines:
-  (define str-new
-    (string-join indented-lines "\n"))
-  ; return value:
-  str-new)
-  )
+   "\n"))
 
 (define-script indent-table
   #:label "Table indent (on double spaces)"
@@ -119,7 +87,7 @@ empty columns are added at the end of the shortest rows.
     (indent-table* str)))
 
 (define-script indent-table/gui
-  #:label "Table indent (&gui)"
+  #:label "Table indent… (&gui)"
   #:menu-path ("Sele&ction")
   (λ (str) 
     (define sep (get-text-from-user "Table Indent" "Separator:"))
