@@ -6,7 +6,6 @@
          racket/list
          racket/format
          racket/string
-         racket/gui/base
          quickscript)
 
 (script-help-string "Displays a list of modules that `provide` the procedure under the cursor.")
