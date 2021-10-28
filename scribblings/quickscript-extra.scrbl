@@ -79,9 +79,9 @@ type one themselves, and may be unsure what name to pick).
 
 Also consider adding a permissive license. We recommend a dual license Apache 2.0 / MIT:
 @racketblock[
- (code:comment ";;; Copyright <year> <email or name or entity> ")
- (code:comment ";;; License: [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0) or")
- (code:comment ";;;          [MIT license](http://opensource.org/licenses/MIT) at your option.")
+ #,(elem ";;; Copyright <year> <email or name or entity> ")
+ #,(elem ";;; License: [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0) or")
+ #,(elem ";;;          [MIT license](http://opensource.org/licenses/MIT) at your option.")
 ]
 
 Scripts fetched by @tt{url2script} are added to the default script directory.
