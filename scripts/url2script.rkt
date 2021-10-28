@@ -123,7 +123,8 @@
     (define str (get-text-from-user
                  "url2script"
                  (string-append
-                  "IMPORTANT: Make sure you trust the script at the given URL!\n\n"
+                  "IMPORTANT:\nMake sure you trust the script before clicking on OK, "
+                  "It may run automatically.\n\n"
                   "Enter a URL to gist, gitlab snippet or pasterack, or to a raw racket file:")))
     (when str
       ; At a special commit, with the name at the end, which we could extract.
@@ -248,12 +249,3 @@
   ;; TODO: Check that updating a script where the source does not have a url2script-info
   ;; submodule produces a script that still has the submodule
   )
-
-;=================================;
-;=== url2script-info submodule ===;
-;=================================;
-
-(module url2script-info racket/base
-  (provide url filename)
-  (define filename "url2script.rkt")
-  (define url "https://gist.githubusercontent.com/Metaxal/77391e388303af5513d09bcd640f116c"))
