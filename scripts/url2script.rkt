@@ -12,7 +12,8 @@
          racket/port
          racket/path
          racket/gui/base
-         net/url)
+         net/url
+         net/sendurl)
 
 (script-help-string "Fetches a quickscript at a given url and adds it to the library.")
 
@@ -180,6 +181,23 @@
           #f
           '(ok stop))]))
     #f))
+
+(define-script edit-script-at-url
+  #:label "Visit published script (browser)"
+  #:menu-path ("url2script")
+  (λ (selection #:file f)
+    (when f
+      (define submod-url (get-submod f 'url))
+        
+      (cond
+        [submod-url
+         (send-url submod-url)]
+        [else
+         (message-box
+          "Error"
+          "Unable to find original url. Script may not have been downloaded with url2script."
+          #f
+          '(ok stop))]))))
 
 ;=============;
 ;=== Tests ===;
