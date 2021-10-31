@@ -182,7 +182,7 @@
           '(ok stop))]))
     #f))
 
-(define-script edit-script-at-url
+(define-script visit-script-at-url
   #:label "Visit published script (browser)"
   #:menu-path ("url2script")
   (λ (selection #:file f)
