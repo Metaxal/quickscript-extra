@@ -97,7 +97,7 @@
                  [current-namespace (make-base-empty-namespace)]
                  [current-environment-variables
                   ; prevent writing to (actual) environment variables
-                  (environment-variables-copy current-environment-variables)])
+                  (environment-variables-copy (current-environment-variables))])
     (dynamic-require `(submod (file ,(path->string f)) ,url2script-submod-name)
                      sym
                      fail-thunk)))
