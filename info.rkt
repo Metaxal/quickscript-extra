@@ -9,6 +9,7 @@
                "racket-index"
                "scribble-lib"
                "srfi-lite-lib"
+               "net-lib"
                "web-server-lib"))
 (define build-deps '(#;"scribble-lib" "racket-doc" "rackunit-lib"))
 (define scribblings '(("scribblings/quickscript-extra.scrbl" ())))
