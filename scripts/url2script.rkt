@@ -81,6 +81,8 @@
 ;; Don't allow file or network access in the url2script submodule,
 ;; in particular because this module is `require`d right after downloading,
 ;; before the user has a chance to look at the file.
+;; This prevents write and execute access, including calls to `system` and
+;; `process` and friends.
 (define dynreq-security-guard
   (make-security-guard (current-security-guard)
                        (λ (sym pth access)
@@ -92,7 +94,10 @@
 ;; Get information from the url2script submodule.
 (define (get-submod f sym [fail-thunk (λ () #f)])
   (parameterize ([current-security-guard dynreq-security-guard]
-                 [current-namespace (make-base-empty-namespace)])
+                 [current-namespace (make-base-empty-namespace)]
+                 [current-environment-variables
+                  ; prevent writing to (actual) environment variables
+                  (environment-variables-copy current-environment-variables)])
     (dynamic-require `(submod (file ,(path->string f)) ,url2script-submod-name)
                      sym
                      fail-thunk)))
