@@ -11,6 +11,7 @@
          racket/match
          racket/port
          racket/path
+         racket/string
          racket/gui/base
          net/url
          net/sendurl)
@@ -63,33 +64,19 @@
 ;; Doesn't add a submodule if one already exists.
 ;; Allows the designer to give the default file name to save the script.
 (define (write-script fout text aurl #:filename [filename (file-name-from-path fout)])
-  ;; First, write the script to a temp file so as to check if it has some good module properties.
-  (define ftmp (make-temporary-file))
-  (display-to-file text ftmp #:exists 'replace) ; replace because `make-temporary-file` creates the file
 
-  (define submod-first-line
-    (string-append "(module " (symbol->string url2script-submod-name) " racket/base"))
-  (define add-submod?
-    (not (has-submod? ftmp))
-    #;(not (string-contains? text submod-first-line)))
+  (display-to-file text fout #:exists 'replace)
   
-  (display-to-file
-         #:exists 'replace
-         (string-append
-          text
-          (if add-submod?
-            (string-append
-             "\n"
-             submod-first-line
-             "
-  (provide filename url)
-  (define filename " (format "~s" (and filename (path->string filename))) ")
-  (define url " (format "~s" aurl) "))
-")
-            ""))
-         fout)
-
-  (delete-file ftmp))
+  (unless (has-submod? fout)
+    (display-to-file
+     #:exists 'append
+     (string-append
+      "\n"
+      "(module " (symbol->string url2script-submod-name) " racket/base\n" 
+      "  (provide filename url)\n"
+      "  (define filename " (format "~s" (and filename (path->string filename))) ")\n"
+      "  (define url " (format "~s" aurl) "))\n")
+     fout)))
 
 ;; Don't allow file or network access in the url2script submodule,
 ;; in particular because this module is `require`d right after downloading,
@@ -112,9 +99,15 @@
 
 ;; Does the file contain a url2script submodule?
 (define (has-submod? f)
-  (with-handlers ([exn:fail? (λ (e) #f)])
+  (with-handlers ([(λ (e) (and (exn:fail? e)
+                               (string-prefix? (exn-message e) "instantiate: unknown module")))
+                   (λ (e) #f)])
     (get-submod f #f)
     #t))
+
+;====================;
+;=== Quickscripts ===;
+;====================;
 
 (define-script url2script
   #:label "Fetch script…"
@@ -210,8 +203,15 @@
     (define f (make-temporary-file))
     (define aurl "https://this.is.your/home/now")
     (write-script f "#lang racket/base\n" aurl)
+    (check-equal? (has-submod? f) #t)
     (check-equal? (get-submod f 'url)
-                  aurl))
+                  aurl)
+
+    (write-to-file '(module mymod racket/base (displayln "yop")) f #:exists 'replace)
+    (check-equal? (has-submod? f) #f)
+    ; syntax error
+    (check-exn exn:fail? (λ () (write-script f "#lang racket/base\nraise-me-well!\n" aurl)))
+    )
 
   (define (test-parse-url url)
     (call-with-values (λ () (parse-url url)) list))
@@ -266,4 +266,6 @@
 
   ;; TODO: Check that updating a script where the source does not have a url2script-info
   ;; submodule produces a script that still has the submodule
+
+  
   )
