@@ -1,7 +1,8 @@
 #lang racket/gui
-(require quickscript)
+(require quickscript
+         search-list-box)
 
-(script-help-string "Quickly navigate between lines")
+(script-help-string "Quickly navigate between lines and headlines")
 
 #|
 Bookmarks are "anchors" as comments in the source code, and thus are part of the file
@@ -120,35 +121,18 @@ The full history is saved, so the user can get back like in an undo list.
 
 (define (bookmark-frame marks ed)
   (define topwin (send ed get-top-level-window))
-  (define fr (new frame% [parent #f]
-                  [label "Bookmarks"]
-                  [min-width 300] [min-height 300]))
-  (define msg (new message% [parent fr] [label "Press <space> to select"]))
-  (define (list-box-select lb)
-    (define sel (send lb get-selection))
-    (when sel
-      (save-current-line! ed)
-      (ed-goto-line ed (first (list-ref marks sel))))
-    (when (send cb get-value)
-      (send fr show #f)))
-  (define (refresh-marks lb)
-    (set! marks (get-marks ed))
-    (send lb set (map second marks)))
-  (define lb (new list-box% [label #f]
-                  [parent fr]
-                  [choices (map second marks)] ; show line number too?
-                  [callback (λ (lb ev) 
-                              (print (send ev get-event-type))
-                              (when (eq? (send ev get-event-type) 'list-box-dclick)
-                                (list-box-select lb)))]
-                  ))
-  (define hp (new horizontal-panel% [parent fr] [alignment '(center center)] [stretchable-height #f]))
-  (define bt-refresh (new button% [parent hp] [label "Refresh"] [callback (λ _ (refresh-marks lb))]))
-  (define cb (new check-box% [parent hp] [label "Close on select?"] [value #t]))
-  (define bt (new button% [parent fr] [label "Go!"] [callback (λ _ (list-box-select lb))]))
-  ; Center frame on parent frame
-  (send fr reflow-container) ;@@ Another bookmark
-  (send fr move (+ (send topwin get-x) (round (/ (- (send topwin get-width) (send fr get-width)) 2)))
-        (+ (send topwin get-y) (round (/ (- (send topwin get-height) (send fr get-height)) 2))) )
-  (send lb focus)
-  (send fr show #t))
+  (define slbf
+    (new search-list-box-frame% [parent topwin]
+         [label "Bookmarks"]
+         [contents (get-marks ed)] ; (list-of (list/c line-num label))
+         [key second]
+         [filter word-filter]
+         [callback (λ (idx label content)
+                     (save-current-line! ed)
+                     (ed-goto-line ed (first content))
+                     (when (send cb get-value)
+                       (send slbf show #f)))]
+         [show? #f]))
+  (define cb (new check-box% [parent slbf] [label "Close on select?"] [value #t]))
+  (send slbf center)
+  (send slbf show #t))
