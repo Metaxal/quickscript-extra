@@ -5,7 +5,7 @@
 (script-help-string "More scripts to download with url2script.")
 
 ; Launch https://github.com/racket/racket/wiki/Quickscript-Scripts-for-DrRacket in browser
-(define-script pasterack
+(define-script more-scripts
   #:label "More scripts"
   #:menu-path ("&Utils")
   #:help-string "Opens the Racket wiki page for DrRacket Quickscript scripts."
