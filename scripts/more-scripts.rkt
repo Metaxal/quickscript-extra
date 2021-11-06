@@ -7,7 +7,7 @@
 ; Launch https://github.com/racket/racket/wiki/Quickscript-Scripts-for-DrRacket in browser
 (define-script more-scripts
   #:label "More scripts"
-  #:menu-path ("&Utils")
+  #:menu-path ("url2script")
   #:help-string "Opens the Racket wiki page for DrRacket Quickscript scripts."
   (λ (str) 
     (send-url "https://github.com/racket/racket/wiki/Quickscript-Scripts-for-DrRacket")
