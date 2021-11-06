@@ -107,7 +107,7 @@
   (with-handlers ([(λ (e) (and (exn:fail? e)
                                (string-prefix? (exn-message e) "instantiate: unknown module")))
                    (λ (e) #f)])
-    (get-submod f #f)
+    (get-submod f (void))
     #t))
 
 ;====================;
