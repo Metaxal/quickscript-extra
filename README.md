@@ -149,8 +149,7 @@ Apache 2.0 / MIT:
 
 ```racket
 ;;; Copyright <year> <email or name or entity>                        
-;;; License: [Apache License, Version                                 
-2.0](http://www.apache.org/licenses/LICENSE-2.0) or                   
+;;; License: [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0) or                   
 ;;;          [MIT license](http://opensource.org/licenses/MIT) at your
 option.                                                               
 ```
