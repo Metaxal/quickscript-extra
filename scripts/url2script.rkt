@@ -14,7 +14,7 @@
          racket/string
          racket/gui/base
          net/url
-         net/sendurl)
+         browser/external)
 
 (script-help-string "Fetches a quickscript at a given url and adds it to the library.")
 
@@ -196,6 +196,14 @@
           "Unable to find original url. Script may not have been downloaded with url2script."
           #f
           '(ok stop))]))))
+
+(define-script more-scripts
+  #:label "Get more scripts (browser)"
+  #:menu-path ("url2script")
+  #:help-string "Opens the Racket wiki page for DrRacket Quickscript scripts."
+  (λ (str) 
+    (send-url "https://github.com/racket/racket/wiki/Quickscript-Scripts-for-DrRacket")
+    #f))
 
 ;=============;
 ;=== Tests ===;
