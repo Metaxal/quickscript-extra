@@ -8,6 +8,7 @@
                "pict-lib"
                "racket-index"
                "scribble-lib"
+               "search-list-box"
                "srfi-lite-lib"
                "net-lib"
                "web-server-lib"))
