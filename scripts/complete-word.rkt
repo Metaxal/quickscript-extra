@@ -25,6 +25,12 @@
     ("subitem"  "@subitem{" "}")
     ("$"        "@${" "}")
     ("$$"       "@$${" "}")
+
+    ; Qi:
+    ("flow" "(☯ " ")")
+    ("sep" "(△ " ")")
+    ("collect" "(▽ " ")")
+    ("ground" "⏚" "")
     ))
 
 (define-script complete-word
