@@ -23,8 +23,8 @@
          (values r g b "~a ~a ~a")]
         [`(#(,(? number? r) ,(? number? g) ,(? number? b)))
          (values r g b "#(~a ~a ~a)")]
-        [else (values #f #f #f "(make-color ~a ~a ~a)")]))
-    (let ([c (get-color-from-user #f #f (and r (make-color r g b)))])
+        [else (values 255 0 0 "(make-color ~a ~a ~a)")]))
+    (let ([c (get-color-from-user #f #f (make-color r g b))])
       (and c
            (format new-str
                    (send c red)
