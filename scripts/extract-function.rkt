@@ -415,7 +415,7 @@
              (set! module-stx mod-stx))))))
 
 (define-script extract-function-to-module-level
-  #:label "Extract function to &top"
+  #:label "Extract function to to&p"
   #:menu-path ("Re&factor")
   (λ (selection #:file f #:editor ed #:frame fr)
     ; todo: find the position at the top
