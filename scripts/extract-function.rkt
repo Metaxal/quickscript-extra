@@ -414,9 +414,24 @@
              ; When module-stx is set, we are ready.
              (set! module-stx mod-stx))))))
 
+(define-script extract-function-to-module-level
+  #:label "Extract function to &top"
+  #:menu-path ("Re&factor")
+  (λ (selection #:file f #:editor ed #:frame fr)
+    ; todo: find the position at the top
+    (extract-function selection #:file f #:editor ed #:frame fr)
+    (define to-pos
+      ; move up sexp as much as possible
+      (let loop ([pos (send ed get-start-position)])
+        (define next-pos (send ed find-up-sexp pos))
+        (if next-pos (loop next-pos) pos)))
+    (send ed set-position to-pos)
+    ; move-sexp-up
+    (put-function "" #:file f #:editor ed #:frame fr)
+    (send ed insert "\n")))
 
 (define-script extract-function
-  #:label "extract-function"
+  #:label "E&xtract function"
   #:menu-path ("Re&factor")
   #:shortcut #\x
   #:shortcut-prefix (ctl shift)
@@ -444,7 +459,7 @@
     #f))
 
 (define-script put-function
-  #:label "put-function"
+  #:label "P&ut function"
   #:menu-path ("Re&factor")
   #:shortcut #\y
   #:shortcut-prefix (ctl shift)
