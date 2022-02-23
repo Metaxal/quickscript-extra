@@ -7,7 +7,7 @@
          racket/gui/base)
 
 (script-help-string
- "Extracts a block of code out of its context and generates a function and a call
+ "Extracts a block of code out of its context and generates a function/macro and a call
  [video](https://www.youtube.com/watch?v=XinMxDLZ7Zw)")
 
 ;;;; How to use:
@@ -383,6 +383,34 @@
           [else
            (string-append fun1 "\n(values " (apply ~a #:separator " " out-ids) "))\n")]))
   (values call-site fun-site))
+
+(define (make-call+syntax-sites from-string stx-name in-ids out-ids)
+  ;; The two common way to select text is either sexp-based or line based.
+  ;; If the last charater of the selection is a newline (line-based),
+  ;; put one back in.
+  (define last-pos (- (string-length from-string) 1))
+  (define has-newline?
+    (eqv? #\newline (string-ref from-string last-pos)))
+  (when has-newline?
+    (set! from-string (substring from-string 0 last-pos)))
+  (define maybe-newline (if has-newline? "\n" ""))
+  (define header
+    (string-append "(" (~a stx-name) " "
+                   (if (empty? in-ids)
+                     ""
+                     (string-append "(" (apply ~a in-ids #:separator " ") ")"
+                                    (if (empty? out-ids) "" "\n")))
+                   (if (empty? out-ids)
+                     ""
+                     (string-append "(" (apply ~a out-ids #:separator " ") ")"))
+                   ")"))
+  (define call-site (string-append header maybe-newline))
+  (define stx-site
+    (string-append "(define-syntax-rule " header "\n"
+                   "(begin\n"
+                   from-string
+                   "))\n")) ; warning: may be invalid if the last line is a comment
+  (values call-site stx-site))
   
 (define start #f)
 (define end #f)
@@ -417,8 +445,7 @@
 (define-script extract-function-to-module-level
   #:label "Extract function to to&p"
   #:menu-path ("Re&factor")
-  (λ (selection #:file f #:editor ed #:frame fr)
-    ; todo: find the position at the top
+  (λ (selection #:file f #:editor ed #:frame fr #:as-syntax? [as-syntax? #f])
     (extract-function selection #:file f #:editor ed #:frame fr)
     (define to-pos
       ; move up sexp as much as possible
@@ -426,9 +453,14 @@
         (define next-pos (send ed find-up-sexp pos))
         (if next-pos (loop next-pos) pos)))
     (send ed set-position to-pos)
-    ; move-sexp-up
-    (put-function "" #:file f #:editor ed #:frame fr)
+    (put-function "" #:file f #:editor ed #:frame fr #:as-syntax? as-syntax?)
     (send ed insert "\n")))
+
+(define-script extract-syntax-to-module-level
+  #:label "Extract s&yntax to top"
+  #:menu-path ("Re&factor")
+  (λ (selection #:file f #:editor ed #:frame fr)
+    (extract-function-to-module-level selection #:file f #:editor ed #:frame fr #:as-syntax? #t)))
 
 (define-script extract-function
   #:label "E&xtract function"
@@ -464,7 +496,7 @@
   #:shortcut #\y
   #:shortcut-prefix (ctl shift)
   #:persistent
-  (λ (selection #:file f #:editor ed #:frame fr)
+  (λ (selection #:file f #:editor ed #:frame fr #:as-syntax? [as-syntax? #f])
     ;; If module-stx, then the thread is irrelevant.
     ;; If not, then wait for the thread to produce module-stx.
     (when (or module-stx
@@ -536,7 +568,8 @@ Do you want to continue?"
 
              (define from-string (send ed get-text start end))
              (define-values (call-site fun-site)
-               (make-call+fun-sites from-string fun-name in-ids out-ids))
+               ((if as-syntax? make-call+syntax-sites make-call+fun-sites)
+                from-string fun-name in-ids out-ids))
 
              (send ed begin-edit-sequence)
              (send ed delete start end)
