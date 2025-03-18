@@ -42,8 +42,8 @@
 (define-script dabbrev
   #:label "D&ynamic completion"
   #:menu-path ("Re&factor")
-  #:shortcut #\t
-  #:shortcut-prefix (ctl shift)
+  #:shortcut #\/
+  #:shortcut-prefix (alt)
   (λ (s #:editor ed) 
     (define pos (send ed get-end-position)) 
     (define left  (get-word ed pos -1))
