@@ -11,8 +11,6 @@ Shows a conflict dialog if there are also unsaved changes in DrRacket.")
 
 ;; Register preferences
 (with-handlers ([exn:fail? void])
-  (preferences:set-default 'quickscript:extra:reload-on-focus:enabled? #t boolean?))
-(with-handlers ([exn:fail? void])
   (preferences:set-default 'quickscript:extra:reload-on-focus:diff-tool 'auto 
                            (λ (x) (or (eq? x 'auto) (string? x) (path? x)))))
 
@@ -121,8 +119,7 @@ Shows a conflict dialog if there are also unsaved changes in DrRacket.")
   choice)
 
 (define (check-and-reload defs file frame)
-  (when (and (preferences:get 'quickscript:extra:reload-on-focus:enabled?)
-             defs file (file-exists? file)
+  (when (and defs file (file-exists? file)
              (not (hash-ref diff-running-files file #f)))
     (define disk-mtime (file-or-directory-modify-seconds file))
     (define last-prompted (hash-ref prompted-mtimes file 0))
@@ -218,15 +215,4 @@ Shows a conflict dialog if there are also unsaved changes in DrRacket.")
        (delete-file temp-file)
        (message-box "Error" "No diff tool (GUI or CLI) was found." frame '(ok error))])))
 
-;; Menu item to toggle the feature
-(define-script toggle-reload-on-focus
-  #:label "Toggle auto-reload on focus"
-  #:menu-path ("Manage")
-  (λ (str)
-    (define new-val (not (preferences:get 'quickscript:extra:reload-on-focus:enabled?)))
-    (preferences:set 'quickscript:extra:reload-on-focus:enabled? new-val)
-    (message-box "Auto-reload on focus"
-                 (format "Auto-reload on focus is now ~a." (if new-val "ENABLED" "DISABLED"))
-                 #f
-                 '(ok info))
-    str))
+

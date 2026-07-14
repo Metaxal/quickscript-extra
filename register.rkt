@@ -7,4 +7,4 @@
 ;; register quickscript-extra in quickscript's library.
 (begin-for-syntax
   (define-runtime-path script-dir "scripts")
-  (add-third-party-script-directory! script-dir))
+  (add-third-party-script-directory! script-dir '("reload-on-focus.rkt")))
