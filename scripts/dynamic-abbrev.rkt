@@ -44,27 +44,40 @@
   #:menu-path ("Re&factor")
   #:shortcut #\/
   #:shortcut-prefix (alt)
+  #:os-types (windows unix)
   (λ (s #:editor ed) 
-    (define pos (send ed get-end-position)) 
-    (define left  (get-word ed pos -1))
-    (define right (get-word ed pos  1))
-    (define txt (send ed get-text))
-    (define matches
-      (remove-duplicates
-       (regexp-match* (pregexp (string-append "\\b" (regexp-quote left) 
-                                              "[^" non-word-re "]*"))
-                      txt)))
-    (when matches
-      (define mems (member (string-append left right) matches))
-      (define str
-        (if (and mems (not (empty? (rest mems))))
-            (second mems)
-            (first matches)))
-      (when str
-        (send ed begin-edit-sequence)
-        (send ed delete pos (+ pos (string-length right)))
-        (send ed insert
-              (substring str (string-length left)))
-        (send ed set-position pos)
-        (send ed end-edit-sequence)))
-    #f))
+    (dabbrev-do ed)))
+
+(define-script dabbrev-mac
+  #:label "D&ynamic completion"
+  #:menu-path ("Re&factor")
+  #:shortcut #\/
+  #:shortcut-prefix (option)
+  #:os-types (macosx)
+  (λ (s #:editor ed) 
+    (dabbrev-do ed)))
+
+(define (dabbrev-do ed) 
+  (define pos (send ed get-end-position)) 
+  (define left  (get-word ed pos -1))
+  (define right (get-word ed pos  1))
+  (define txt (send ed get-text))
+  (define matches
+    (remove-duplicates
+     (regexp-match* (pregexp (string-append "\\b" (regexp-quote left) 
+                                            "[^" non-word-re "]*"))
+                    txt)))
+  (when matches
+    (define mems (member (string-append left right) matches))
+    (define str
+      (if (and mems (not (empty? (rest mems))))
+          (second mems)
+          (first matches)))
+    (when str
+      (send ed begin-edit-sequence)
+      (send ed delete pos (+ pos (string-length right)))
+      (send ed insert
+            (substring str (string-length left)))
+      (send ed set-position pos)
+      (send ed end-edit-sequence)))
+  #f)
